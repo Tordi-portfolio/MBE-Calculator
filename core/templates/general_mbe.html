@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block title %}
+General Material Balance Equation
+{% endblock %}
+
+{% block content %}
+
+    <style>
+
+        body{
+            background:#f5f7fb;
+            font-family: Arial, sans-serif;
+            margin:0;
+            padding:0;
+            color:#222;
+        }
+
+        .container{
+            max-width:900px;
+            margin:50px auto;
+            background:white;
+            padding:30px;
+            border-radius:10px;
+            box-shadow:0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        h1{
+            text-align:center;
+            font-size:26px;
+        }
+
+        .formula{
+            text-align:center;
+            font-size:18px;
+            background:#f0f2f5;
+            padding:12px;
+            border-radius:6px;
+            margin-bottom:25px;
+        }
+
+        label{
+            font-size:14px;
+            font-weight:600;
+        }
+
+        input{
+            width:100%;
+            padding:10px;
+            margin-top:5px;
+            margin-bottom:15px;
+            border:1px solid #ccc;
+            border-radius:6px;
+            font-size:14px;
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            background:#2d6cdf;
+            color:white;
+            border:none;
+            border-radius:6px;
+            font-size:15px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#1f56b3;
+        }
+
+        .result{
+            margin-top:20px;
+            padding:15px;
+            background:#f8f9fa;
+            border-left:5px solid #2d6cdf;
+        }
+
+        a{
+            display:inline-block;
+            margin-top:15px;
+            color:#2d6cdf;
+            text-decoration:none;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>General Material Balance Equation</h1>
+
+    <div class="formula">
+        F = N(Eo + mEg + Efw) + WeBw
+    </div>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <label>Underground Withdrawal Term (F)</label>
+        <input type="number" step="any" name="F" required>
+
+        <label>Oil Expansion (Eo)</label>
+        <input type="number" step="any" name="Eo" required>
+
+        <label>Gas Cap Expansion (Eg)</label>
+        <input type="number" step="any" name="Eg" required>
+
+        <label>Formation & Water Expansion (Efw)</label>
+        <input type="number" step="any" name="Efw" required>
+
+        <label>Gas Cap Ratio (m)</label>
+        <input type="number" step="any" name="m" required>
+
+        <label>Water Influx (We)</label>
+        <input type="number" step="any" name="We" required>
+
+        <label>Water FVF (Bw)</label>
+        <input type="number" step="any" name="Bw" required>
+
+        <button type="submit">Calculate OOIP (N)</button>
+
+    </form>
+
+    {% if result is not None %}
+
+    <div class="result">
+        <h3>Result</h3>
+        <p><strong>Original Oil in Place (N) =</strong> {{ result }}</p>
+    </div>
+
+    {% endif %}
+
+    <a href="/">← Back to Dashboard</a>
+
+</div>
+
+</body>
+{% endblock %}

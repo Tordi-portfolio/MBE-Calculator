@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Formation & Water Expansion (Efw)
+{% endblock %}
+
+{% block content %}
+
+    <style>
+
+        body{
+            background:#f5f7fb;
+            font-family: Arial, sans-serif;
+            margin:0;
+            padding:0;
+            color:#222;
+        }
+
+        .container{
+            max-width:850px;
+            margin:50px auto;
+            background:white;
+            padding:30px;
+            border-radius:10px;
+            box-shadow:0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        h1{
+            text-align:center;
+            font-size:26px;
+        }
+
+        .formula{
+            text-align:center;
+            font-size:18px;
+            background:#f0f2f5;
+            padding:10px;
+            border-radius:6px;
+            margin-bottom:25px;
+        }
+
+        label{
+            font-size:14px;
+            font-weight:600;
+        }
+
+        input{
+            width:100%;
+            padding:10px;
+            margin-top:5px;
+            margin-bottom:15px;
+            border:1px solid #ccc;
+            border-radius:6px;
+            font-size:14px;
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            background:#2d6cdf;
+            color:white;
+            border:none;
+            border-radius:6px;
+            font-size:15px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#1f56b3;
+        }
+
+        .result{
+            margin-top:20px;
+            padding:15px;
+            background:#f8f9fa;
+            border-left:5px solid #2d6cdf;
+        }
+
+        a{
+            display:inline-block;
+            margin-top:15px;
+            color:#2d6cdf;
+            text-decoration:none;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Formation & Water Expansion (Efw)</h1>
+
+    <div class="formula">
+        Efw = Boi[(cf + cw·Swi)ΔP] / (1 − Swi)
+    </div>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <label>Initial Oil FVF (Boi)</label>
+        <input type="number" step="any" name="Boi" required>
+
+        <label>Formation Compressibility (cf)</label>
+        <input type="number" step="any" name="cf" required>
+
+        <label>Water Compressibility (cw)</label>
+        <input type="number" step="any" name="cw" required>
+
+        <label>Initial Water Saturation (Swi)</label>
+        <input type="number" step="any" name="Swi" required>
+
+        <label>Initial Pressure (Pi)</label>
+        <input type="number" step="any" name="Pi" required>
+
+        <label>Current Pressure (P)</label>
+        <input type="number" step="any" name="P" required>
+
+        <button type="submit">Calculate Efw</button>
+
+    </form>
+
+    {% if result is not None %}
+
+    <div class="result">
+        <h3>Result</h3>
+        <p><strong>Efw =</strong> {{ result }}</p>
+    </div>
+
+    {% endif %}
+
+    <a href="/">← Back to Dashboard</a>
+
+</div>
+
+</body>
+
+{% endblock %}

@@ -1,0 +1,197 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MBE Solver{% endblock %}</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family:Arial, Helvetica, sans-serif;
+            background:#0f172a;
+            color:white;
+            min-height:100vh;
+            display:flex;
+            flex-direction:column;
+        }
+
+        /* NAVBAR */
+        .navbar{
+            background:#111827;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:15px 8%;
+            position:sticky;
+            top:0;
+            z-index:1000;
+            box-shadow:0 2px 10px rgba(0,0,0,.3);
+            position:sticky;
+        }
+
+        .logo{
+            font-size:1.5rem;
+            font-weight:bold;
+            color:#38bdf8;
+            text-decoration:none;
+        }
+
+        .nav-links{
+            display:flex;
+            list-style:none;
+            gap:25px;
+        }
+
+        .nav-links a{
+            text-decoration:none;
+            color:white;
+            font-weight:500;
+            transition:.3s;
+        }
+
+        .nav-links a:hover{
+            color:#38bdf8;
+        }
+
+        .menu-btn{
+            display:none;
+            font-size:30px;
+            cursor:pointer;
+            color:white;
+        }
+
+        /* CONTENT */
+        .container{
+            flex:1;
+            padding:30px;
+        }
+
+        /* FOOTER */
+        footer{
+            background:#111827;
+            text-align:center;
+            padding:20px;
+        }
+
+        footer p{
+            color:#94a3b8;
+        }
+
+        /* MOBILE */
+        @media(max-width:768px){
+
+            .menu-btn{
+                display:block;
+            }
+
+            .nav-links{
+                position:absolute;
+                top:70px;
+                left:0;
+                width:100%;
+                background:#111827;
+                flex-direction:column;
+                text-align:center;
+                display:none;
+                max-height:80vh;
+                overflow-y:auto;
+                z-index:9999;
+            }
+
+            .nav-links.active{
+                display:flex;
+            }
+
+            .nav-links li{
+                padding:15px;
+                border-top:1px solid #1f2937;
+            }
+
+            .nav-links a{
+                display:block;
+                width:100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+
+        <a href="{% url 'home' %}" class="logo">
+            MBE Solver
+        </a>
+
+        <div class="menu-btn" onclick="toggleMenu()">
+            ☰
+        </div>
+
+        <ul class="nav-links" id="navLinks">
+
+            <li><a href="{% url 'home' %}">Home</a></li>
+
+            <li><a href="#">MBE Calculator</a></li>
+
+            <li><a href="{% url 'underground_withdrawal' %}">Underground Withdrawal</a></li>
+
+            <li><a href="{% url 'oil_expansion' %}">Oil Expansion (Eo)</a></li>
+
+            <li><a href="{% url 'gas_cap_expansion' %}">Gas Cap Expansion (Eg)</a></li>
+
+            <li><a href="{% url 'formation_water_expansion' %}">Formation & Water Expansion</a></li>
+
+            <li><a href="{% url 'general_mbe' %}">General MBE (OOIP)</a></li>
+
+            <li><a href="{% url 'gas_fvf' %}">Gas FVF</a></li>
+
+            <li><a href="{% url 'gas_cap_ratio' %}">Gas Cap Ratio</a></li>
+
+            <li><a href="{% url 'recovery_factor' %}">Recovery Factor</a></li>
+
+            <li><a href="{% url 'ogip' %}">Original Gas In Place</a></li>
+
+            <li><a href="{% url 'schilthuis' %}">Schilthuis Water Influx</a></li>
+
+            <li><a href="{% url 'van_everdingen_hurst' %}">Van Everdingen–Hurst Water Influx</a></li>
+
+            <li><a href="{% url 'fetkovich' %}">Fetkovich Water Influx</a></li>
+
+            {% if user.is_authenticated %}
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+
+            {% endif %}
+
+        </ul>
+
+    </nav>
+
+    <!-- CONTENT -->
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>Material Balance Equation Solver © 2026 | Developed by Gbarabe Tordi Joseph</p>
+    </footer>
+
+    <script>
+        function toggleMenu(){
+            document.getElementById("navLinks").classList.toggle("active");
+        }
+    </script>
+
+</body>
+</html>

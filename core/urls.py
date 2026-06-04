@@ -1,0 +1,66 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.home, name='home'),
+       path(
+        'underground-withdrawal/',
+        views.underground_withdrawal,
+        name='underground_withdrawal'
+    ),
+    path(
+        "oil-expansion/",
+        views.oil_expansion,
+        name="oil_expansion"
+    ),
+    path(
+        "gas-cap-expansion/",
+        views.gas_cap_expansion,
+        name="gas_cap_expansion"
+    ),
+    path(
+        "formation-water-expansion/",
+        views.formation_water_expansion,
+        name="formation_water_expansion"
+    ),
+    path(
+        "general-mbe/",
+        views.general_mbe,
+        name="general_mbe"
+    ),
+    path(
+        "gas-fvf/",
+        views.gas_fvf,
+        name="gas_fvf"
+    ),
+    path(
+        "gas-cap-ratio/",
+        views.gas_cap_ratio,
+        name="gas_cap_ratio"
+    ),
+    path(
+        "recovery-factor/",
+        views.recovery_factor,
+        name="recovery_factor"
+    ),
+    path(
+        "ogip/",
+        views.ogip,
+        name="ogip"
+    ),
+    path(
+        "schilthuis/",
+        views.schilthuis_water_influx,
+        name="schilthuis"
+    ),
+    path(
+        "van-everdingen-hurst/",
+        views.van_everdingen_hurst,
+        name="van_everdingen_hurst"
+    ),
+    path(
+        "fetkovich/",
+        views.fetkovich_water_influx,
+        name="fetkovich"
+    ),
+]

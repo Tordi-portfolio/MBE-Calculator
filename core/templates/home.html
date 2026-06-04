@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Welcome
+{% endblock %}
+
+{% block content %}
+
+<div style="background:#0f172a; border-radius:10px;">
+
+    <h1 style="text-align:center;">
+        Welcome to the Material Balance Equation Solver
+    </h1>
+
+    <p style="text-align:center; color:#666;">
+        A Petroleum Reservoir Engineering Calculation Platform
+    </p>
+
+    <hr style="margin:30px 0;">
+
+    <p style="line-height:1.8; text-align:justify;">
+
+        Welcome to the Material Balance Equation (MBE) Solver, a web-based
+        petroleum engineering application developed to assist students,
+        researchers, and reservoir engineers in performing reservoir
+        engineering calculations quickly and accurately.
+
+    </p>
+
+    <p style="line-height:1.8; text-align:justify;">
+
+        Material Balance Equation analysis is one of the most important
+        techniques used in reservoir engineering for estimating hydrocarbon
+        reserves, evaluating reservoir performance, and understanding reservoir
+        drive mechanisms. Traditionally, these calculations are performed
+        manually, which can be time-consuming and prone to computational errors.
+
+    </p>
+
+    <p style="line-height:1.8; text-align:justify;">
+
+        This software provides a centralized platform for solving important
+        reservoir engineering equations including:
+
+    </p>
+
+    <ul style="line-height:2; list-style:decimal;">
+        <li>General Material Balance Equation (MBE)</li>
+        <li>Underground Withdrawal Term (F)</li>
+        <li>Oil Expansion Term (Eo)</li>
+        <li>Gas Cap Expansion Term (Eg)</li>
+        <li>Formation and Water Expansion (Efw)</li>
+        <li>Gas Formation Volume Factor (Bg)</li>
+        <li>Gas Cap Ratio (m)</li>
+        <li>Original Oil In Place (OOIP)</li>
+        <li>Original Gas In Place (OGIP)</li>
+        <li>Recovery Factor (RF)</li>
+        <li>Schilthuis Water Influx Model</li>
+        <li>Van Everdingen-Hurst Water Influx Model</li>
+        <li>Fetkovich Water Influx Model</li>
+    </ul>
+
+    <p style="line-height:1.8; text-align:justify;">
+
+        The primary goal of this project is to provide an easy-to-use digital
+        tool that improves computational accuracy, reduces calculation time,
+        and enhances understanding of reservoir behavior through practical
+        engineering calculations.
+
+    </p>
+
+    <div style="text-align:center; margin-top:40px;">
+
+        <a href="{% url 'home' %}"
+           style="
+           background:#2d6cdf;
+           color:white;
+           padding:12px 25px;
+           text-decoration:none;
+           border-radius:5px;
+           font-weight:bold;
+           ">
+            Enter Application
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

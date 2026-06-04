@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+    <style>
+
+        body{
+            background:#f5f7fb;
+            font-family: Arial, sans-serif;
+            margin:0;
+            padding:0;
+            color:#222;
+        }
+
+        .container{
+            max-width:850px;
+            margin:50px auto;
+            background:white;
+            padding:30px;
+            border-radius:10px;
+            box-shadow:0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        h1{
+            text-align:center;
+            font-size:26px;
+            margin-bottom:10px;
+        }
+
+        .formula{
+            text-align:center;
+            font-size:18px;
+            background:#f0f2f5;
+            padding:10px;
+            border-radius:6px;
+            margin-bottom:25px;
+        }
+
+        label{
+            font-size:14px;
+            font-weight:600;
+        }
+
+        input{
+            width:100%;
+            padding:10px;
+            margin-top:5px;
+            margin-bottom:15px;
+            border:1px solid #ccc;
+            border-radius:6px;
+            font-size:14px;
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            background:#2d6cdf;
+            color:white;
+            border:none;
+            border-radius:6px;
+            font-size:15px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#1f56b3;
+        }
+
+        .result{
+            margin-top:20px;
+            padding:15px;
+            background:#f8f9fa;
+            border-left:5px solid #2d6cdf;
+        }
+
+        a{
+            display:inline-block;
+            margin-top:15px;
+            color:#2d6cdf;
+            text-decoration:none;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Underground Withdrawal Term (F)</h1>
+
+    <div class="formula">
+        F = Np [Bo + (Rp − Rs)Bg] + WpBw
+    </div>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <label>Cumulative Oil Produced (Np)</label>
+        <input type="number" step="any" name="Np" required>
+
+        <label>Oil FVF (Bo)</label>
+        <input type="number" step="any" name="Bo" required>
+
+        <label>Producing GOR (Rp)</label>
+        <input type="number" step="any" name="Rp" required>
+
+        <label>Solution GOR (Rs)</label>
+        <input type="number" step="any" name="Rs" required>
+
+        <label>Gas FVF (Bg)</label>
+        <input type="number" step="any" name="Bg" required>
+
+        <label>Water Produced (Wp)</label>
+        <input type="number" step="any" name="Wp" required>
+
+        <label>Water FVF (Bw)</label>
+        <input type="number" step="any" name="Bw" required>
+
+        <button type="submit">Calculate F</button>
+
+    </form>
+
+    {% if result is not None %}
+
+    <div class="result">
+        <h3>Result</h3>
+        <p><strong>F =</strong> {{ result }}</p>
+    </div>
+
+    {% endif %}
+
+    <a href="/">← Back to Dashboard</a>
+
+</div>
+{% endblock %}
+</html>

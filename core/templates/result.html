@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Results</title>
+
+    <style>
+
+        body{
+            background:#0b1020;
+            color:white;
+            font-family:Arial;
+            padding:40px;
+        }
+
+        .card{
+            max-width:700px;
+            margin:auto;
+            background:#151c34;
+            padding:30px;
+            border-radius:15px;
+        }
+
+        h1{
+            text-align:center;
+        }
+
+        p{
+            font-size:20px;
+        }
+
+        a{
+            color:#00d4ff;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<div class="card">
+
+    <h1>Calculation Result</h1>
+
+    <p><strong>OOIP (N):</strong> {{ N }}</p>
+
+    <p><strong>Production Term (F):</strong> {{ F }}</p>
+
+    <p><strong>Oil Expansion (Eo):</strong> {{ Eo }}</p>
+
+    <p><strong>Water Influx (Ew):</strong> {{ Ew }}</p>
+
+    <br>
+
+    <a href="/">Perform Another Calculation</a>
+
+</div>
+
+</body>
+</html>
