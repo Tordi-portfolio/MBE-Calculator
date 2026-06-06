@@ -7,7 +7,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}MBE Solver{% endblock %}</title>
 
+    <!-- AOS ANIMATION -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            AOS.init({
+                duration: 900,
+                once: true,
+                offset: 80
+            });
+        });
+    </script>
+
     <style>
+
         *{
             margin:0;
             padding:0;
@@ -15,111 +30,133 @@
         }
 
         body{
-            font-family:Arial, Helvetica, sans-serif;
-            background:#0f172a;
-            color:white;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #0b1220;
+            color: white;
             min-height:100vh;
             display:flex;
             flex-direction:column;
         }
 
-        /* NAVBAR */
+        /* ================= NAVBAR ================= */
         .navbar{
-            background:#111827;
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            padding:15px 8%;
             position:sticky;
             top:0;
             z-index:1000;
-            box-shadow:0 2px 10px rgba(0,0,0,.3);
-            position:sticky;
+
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+
+            padding:15px 6%;
+            background: rgba(17, 24, 39, 0.85);
+            backdrop-filter: blur(12px);
+
+            box-shadow:0 5px 20px rgba(0,0,0,0.3);
         }
 
         .logo{
-            font-size:1.5rem;
+            font-size:1.3rem;
             font-weight:bold;
             color:#38bdf8;
             text-decoration:none;
         }
 
+        /* ================= NAV LINKS ================= */
         .nav-links{
             display:flex;
             list-style:none;
-            gap:25px;
+            gap:20px;
         }
 
         .nav-links a{
             text-decoration:none;
-            color:white;
+            color:#e5e7eb;
             font-weight:500;
-            transition:.3s;
+            font-size:14px;
+            transition:0.3s;
         }
 
         .nav-links a:hover{
             color:#38bdf8;
         }
 
+        /* ================= HAMBURGER ================= */
         .menu-btn{
             display:none;
-            font-size:30px;
+            font-size:28px;
             cursor:pointer;
             color:white;
         }
 
-        /* CONTENT */
+        /* ================= CONTENT ================= */
         .container{
             flex:1;
-            padding:30px;
+            padding:25px;
+            width:100%;
+            max-width:1200px;
+            margin:auto;
         }
 
-        /* FOOTER */
+        /* ================= FOOTER ================= */
         footer{
-            background:#111827;
+            background:#0f172a;
             text-align:center;
-            padding:20px;
+            padding:15px;
+            border-top:1px solid #1f2937;
         }
 
         footer p{
             color:#94a3b8;
+            font-size:13px;
         }
 
-        /* MOBILE */
-        @media(max-width:768px){
+        /* ================= MOBILE ================= */
+        @media(max-width: 900px){
 
             .menu-btn{
                 display:block;
             }
 
             .nav-links{
-                position:absolute;
-                top:70px;
+                position:fixed;
+                top:65px;
                 left:0;
                 width:100%;
+
                 background:#111827;
                 flex-direction:column;
-                text-align:center;
+
                 display:none;
+                padding:10px 0;
+
                 max-height:80vh;
                 overflow-y:auto;
-                z-index:9999;
+
+                border-top:1px solid #1f2937;
             }
 
             .nav-links.active{
                 display:flex;
+                animation: fadeDown 0.3s ease;
             }
 
             .nav-links li{
-                padding:15px;
-                border-top:1px solid #1f2937;
+                padding:14px;
+                text-align:center;
+                border-bottom:1px solid #1f2937;
             }
 
             .nav-links a{
-                display:block;
-                width:100%;
+                font-size:15px;
             }
         }
+
+        @keyframes fadeDown{
+            from{opacity:0; transform:translateY(-10px);}
+            to{opacity:1; transform:translateY(0);}
+        }
+
     </style>
 </head>
 
@@ -129,7 +166,7 @@
     <nav class="navbar">
 
         <a href="{% url 'home' %}" class="logo">
-            MBE Solver
+            🛢 MBE Solver
         </a>
 
         <div class="menu-btn" onclick="toggleMenu()">
@@ -140,11 +177,15 @@
 
             <li><a href="{% url 'home' %}">Home</a></li>
 
-            <li><a href="#">MBE Calculator</a></li>
+            <li><a href="{% url 'unit_converter' %}">Unit Converter</a></li>
+
+            <li><a href="{% url 'unit_reference' %}">Unit Reference</a></li>
 
             <li><a href="{% url 'underground_withdrawal' %}">Underground Withdrawal</a></li>
 
             <li><a href="{% url 'oil_expansion' %}">Oil Expansion (Eo)</a></li>
+
+            <li><a href="{% url 'oil_expansion_term' %}">Oil Expansion Term (Eo)</a></li>
 
             <li><a href="{% url 'gas_cap_expansion' %}">Gas Cap Expansion (Eg)</a></li>
 
@@ -153,6 +194,18 @@
             <li><a href="{% url 'general_mbe' %}">General MBE (OOIP)</a></li>
 
             <li><a href="{% url 'gas_fvf' %}">Gas FVF</a></li>
+
+            <li><a href="{% url 'gas_cap_drive_reservoir' %}">Gas Cap Drive Reservoir</a></li>
+
+            <li><a href="{% url 'volumetric_oil_reservoir' %}">Volumetric Oil Reservoir (OOIP)</a></li>
+
+            <li><a href="{% url 'oil_fvf' %}">Oil Formation Volume Factor (Bo)</a></li>
+
+            <li><a href="{% url 'gas_material_balance' %}">Gas Material Balance Equation</a></li>
+
+            <li><a href="{% url 'water_drive_reservoir' %}">Water Drive Reservoir</a></li>
+
+            <li><a href="{% url 'combination_drive_reservoir' %}">Combination Drive Reservoir</a></li>
 
             <li><a href="{% url 'gas_cap_ratio' %}">Gas Cap Ratio</a></li>
 
@@ -166,6 +219,8 @@
 
             <li><a href="{% url 'fetkovich' %}">Fetkovich Water Influx</a></li>
 
+            <li><a href="https://tordiportfilio.pythonanywhere.com">Check out my Portfolio</a></li>
+
             {% if user.is_authenticated %}
                 <li><a href="#">Dashboard</a></li>
                 <li><a href="{% url 'logout' %}">Logout</a></li>
@@ -178,15 +233,16 @@
     </nav>
 
     <!-- CONTENT -->
-    <div class="container">
+    <div class="container" data-aos="fade-up">
         {% block content %}{% endblock %}
     </div>
 
     <!-- FOOTER -->
     <footer>
-        <p>Material Balance Equation Solver © 2026 | Developed by Gbarabe Tordi Joseph</p>
+        <p>MBE Solver © 2026 | Built by Gbarabe Tordi Joseph</p>
     </footer>
 
+    <!-- SCRIPT -->
     <script>
         function toggleMenu(){
             document.getElementById("navLinks").classList.toggle("active");
@@ -195,3 +251,20 @@
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

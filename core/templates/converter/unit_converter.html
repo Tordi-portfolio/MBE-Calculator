@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+
+{% block title %}
+MBE Unit Converter
+{% endblock %}
+
+{% block content %}
+
+    <style>
+
+        body{
+            background:#f5f7fb;
+            font-family:Arial,sans-serif;
+            margin:0;
+            padding:0;
+            color:#222;
+        }
+
+        .container{
+            max-width:850px;
+            margin:50px auto;
+            background:white;
+            padding:30px;
+            border-radius:10px;
+            box-shadow:0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        h1{
+            text-align:center;
+            font-size:28px;
+            margin-bottom:20px;
+        }
+
+        .formula{
+            text-align:center;
+            background:#f0f2f5;
+            padding:15px;
+            border-radius:6px;
+            margin-bottom:25px;
+            font-size:16px;
+        }
+
+        label{
+            display:block;
+            margin-bottom:5px;
+            font-weight:600;
+        }
+
+        input, select{
+            width:100%;
+            padding:10px;
+            margin-bottom:15px;
+            border:1px solid #ccc;
+            border-radius:6px;
+            box-sizing:border-box;
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            background:#2d6cdf;
+            color:white;
+            border:none;
+            border-radius:6px;
+            cursor:pointer;
+            font-size:15px;
+        }
+
+        button:hover{
+            background:#1f56b3;
+        }
+
+        .result{
+            margin-top:20px;
+            padding:15px;
+            background:#f8f9fa;
+            border-left:5px solid #2d6cdf;
+        }
+
+        a{
+            display:inline-block;
+            margin-top:20px;
+            text-decoration:none;
+            color:#2d6cdf;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>MBE Unit Converter</h1>
+
+    <div class="formula">
+        Convert Petroleum Engineering Units (Pressure, Temperature, Volume)
+    </div>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <label>Value</label>
+        <input type="number" step="any" name="value" required>
+
+        <label>Conversion Type</label>
+        <select name="conversion_type" required>
+
+            <!-- PRESSURE -->
+            <option value="psi_to_kpa">PSI → kPa</option>
+            <option value="kpa_to_psi">kPa → PSI</option>
+            <option value="bar_to_psi">Bar → PSI</option>
+            <option value="psi_to_bar">PSI → Bar</option>
+            <option value="atm_to_psi">ATM → PSI</option>
+            <option value="psi_to_atm">PSI → ATM</option>
+
+            <!-- TEMPERATURE -->
+            <option value="f_to_r">°F → °R</option>
+            <option value="r_to_f">°R → °F</option>
+            <option value="c_to_k">°C → K</option>
+            <option value="k_to_c">K → °C</option>
+
+            <!-- OIL VOLUME -->
+            <option value="m3_to_bbl">m³ → bbl</option>
+            <option value="bbl_to_m3">bbl → m³</option>
+            <option value="bbl_to_stb">bbl → STB</option>
+            <option value="stb_to_bbl">STB → bbl</option>
+
+            <!-- GAS VOLUME -->
+            <option value="scf_to_m3">scf → m³</option>
+            <option value="m3_to_scf">m³ → scf</option>
+            <option value="mscf_to_scf">Mscf → scf</option>
+            <option value="scf_to_mscf">scf → Mscf</option>
+            <option value="mmscfto_scf">MMscf → scf</option>
+            <option value="scf_to_mmscft">scf → MMscf</option>
+
+            <!-- RESERVOIR VOLUME -->
+            <option value="acreft_to_bbl">acre-ft → bbl</option>
+            <option value="bbl_to_acreft">bbl → acre-ft</option>
+            <option value="acreft_to_m3">acre-ft → m³</option>
+            <option value="m3_to_acreft">m³ → acre-ft</option>
+
+            <!-- BASIC SI -->
+            <option value="psi_to_pa">psi → Pa</option>
+            <option value="pa_to_psi">Pa → psi</option>
+
+        </select>
+
+        <button type="submit">
+            Convert Unit
+        </button>
+
+    </form>
+
+    {% if result is not None %}
+
+    <div class="result">
+
+        <h3>Result</h3>
+
+        <p>
+            <strong>Converted Value:</strong>
+            {{ result }} {{ unit }}
+        </p>
+
+    </div>
+
+    {% endif %}
+
+    <a href="/">← Back to Dashboard</a>
+
+</div>
+
+</body>
+{% endblock %}

@@ -1,16 +1,13 @@
-{% extends 'base.html' %}
-
-{% block title %}
-Gas Cap Expansion Term (Eg)
-{% endblock %}
-
-{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Water Drive Reservoir</title>
 
     <style>
 
         body{
             background:#f5f7fb;
-            font-family: Arial, sans-serif;
+            font-family:Arial,sans-serif;
             margin:0;
             padding:0;
             color:#222;
@@ -27,31 +24,32 @@ Gas Cap Expansion Term (Eg)
 
         h1{
             text-align:center;
-            font-size:26px;
+            font-size:28px;
+            margin-bottom:20px;
         }
 
         .formula{
             text-align:center;
-            font-size:18px;
             background:#f0f2f5;
-            padding:10px;
+            padding:15px;
             border-radius:6px;
             margin-bottom:25px;
+            font-size:18px;
         }
 
         label{
-            font-size:14px;
+            display:block;
+            margin-bottom:5px;
             font-weight:600;
         }
 
         input{
             width:100%;
             padding:10px;
-            margin-top:5px;
             margin-bottom:15px;
             border:1px solid #ccc;
             border-radius:6px;
-            font-size:14px;
+            box-sizing:border-box;
         }
 
         button{
@@ -61,8 +59,8 @@ Gas Cap Expansion Term (Eg)
             color:white;
             border:none;
             border-radius:6px;
-            font-size:15px;
             cursor:pointer;
+            font-size:15px;
         }
 
         button:hover{
@@ -78,9 +76,9 @@ Gas Cap Expansion Term (Eg)
 
         a{
             display:inline-block;
-            margin-top:15px;
-            color:#2d6cdf;
+            margin-top:20px;
             text-decoration:none;
+            color:#2d6cdf;
         }
 
     </style>
@@ -91,34 +89,45 @@ Gas Cap Expansion Term (Eg)
 
 <div class="container">
 
-    <h1>Gas Cap Expansion Term (Eg)</h1>
+    <h1>Water Drive Reservoir</h1>
 
     <div class="formula">
-        Eg = Boi ( (Bg / Bgi) − 1 )
+        N = (F − WeBw) / Eo
     </div>
 
     <form method="POST">
 
         {% csrf_token %}
 
-        <label>Initial Oil FVF (Boi)</label>
-        <input type="number" step="any" name="Boi" required>
+        <label>Underground Withdrawal Term (F)</label>
+        <input type="number" step="any" name="F" required>
 
-        <label>Gas FVF (Bg)</label>
-        <input type="number" step="any" name="Bg" required>
+        <label>Water Influx (We)</label>
+        <input type="number" step="any" name="We" required>
 
-        <label>Initial Gas FVF (Bgi)</label>
-        <input type="number" step="any" name="Bgi" required>
+        <label>Water Formation Volume Factor (Bw)</label>
+        <input type="number" step="any" name="Bw" required>
 
-        <button type="submit">Calculate Eg</button>
+        <label>Oil Expansion Term (Eo)</label>
+        <input type="number" step="any" name="Eo" required>
+
+        <button type="submit">
+            Calculate OOIP
+        </button>
 
     </form>
 
     {% if result is not None %}
 
     <div class="result">
-        <h3>Result</h3>
-        <p><strong>Eg =</strong> {{ result }} {{ unit }}</p>
+
+        <h3>Calculation Result</h3>
+
+        <p>
+            <strong>OOIP (N):</strong>
+            {{ result }} {{ unit }}
+        </p>
+
     </div>
 
     {% endif %}
@@ -128,4 +137,4 @@ Gas Cap Expansion Term (Eg)
 </div>
 
 </body>
-{% endblock %}
+</html>

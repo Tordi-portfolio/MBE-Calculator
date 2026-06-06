@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block title %}
+MBE Unit Reference Table
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <h1> MBE Unit Reference Table</h1>
+
+    <div class="formula">
+        Complete list of petroleum engineering unit conversions used in Material Balance Equation (MBE)
+    </div>
+
+    <!-- PRESSURE -->
+    <h2> Pressure Conversions</h2>
+    <table>
+        <tr><th>From</th><th>To</th><th>Conversion</th></tr>
+        <tr><td>psi</td><td>kPa</td><td>1 psi = 6.89476 kPa</td></tr>
+        <tr><td>kPa</td><td>psi</td><td>1 kPa = 0.145038 psi</td></tr>
+        <tr><td>bar</td><td>psi</td><td>1 bar = 14.5038 psi</td></tr>
+        <tr><td>psi</td><td>bar</td><td>1 psi = 0.0689476 bar</td></tr>
+        <tr><td>atm</td><td>psi</td><td>1 atm = 14.696 psi</td></tr>
+        <tr><td>psi</td><td>atm</td><td>1 psi = 0.068046 atm</td></tr>
+    </table>
+
+    <!-- TEMPERATURE -->
+    <h2> Temperature Conversions</h2>
+    <table>
+        <tr><th>From</th><th>To</th><th>Formula</th></tr>
+        <tr><td>°F</td><td>°R</td><td>T(°R) = T(°F) + 459.67</td></tr>
+        <tr><td>°R</td><td>°F</td><td>T(°F) = T(°R) − 459.67</td></tr>
+        <tr><td>°C</td><td>K</td><td>T(K) = T(°C) + 273.15</td></tr>
+        <tr><td>K</td><td>°C</td><td>T(°C) = T(K) − 273.15</td></tr>
+    </table>
+
+    <!-- OIL VOLUME -->
+    <h2> Oil Volume Conversions</h2>
+    <table>
+        <tr><th>From</th><th>To</th><th>Conversion</th></tr>
+        <tr><td>m³</td><td>bbl</td><td>1 m³ = 6.28981 bbl</td></tr>
+        <tr><td>bbl</td><td>m³</td><td>1 bbl = 0.158987 m³</td></tr>
+        <tr><td>bbl</td><td>STB</td><td>1 bbl ≈ 1 STB</td></tr>
+        <tr><td>STB</td><td>bbl</td><td>1 STB ≈ 1 bbl</td></tr>
+    </table>
+
+    <!-- GAS VOLUME -->
+    <h2> Gas Volume Conversions</h2>
+    <table>
+        <tr><th>From</th><th>To</th><th>Conversion</th></tr>
+        <tr><td>scf</td><td>m³</td><td>1 scf = 0.0283168 m³</td></tr>
+        <tr><td>m³</td><td>scf</td><td>1 m³ = 35.3147 scf</td></tr>
+        <tr><td>Mscf</td><td>scf</td><td>1 Mscf = 1,000 scf</td></tr>
+        <tr><td>MMscf</td><td>scf</td><td>1 MMscf = 1,000,000 scf</td></tr>
+        <tr><td>scf</td><td>Mscf</td><td>1 scf = 0.001 Mscf</td></tr>
+        <tr><td>scf</td><td>MMscf</td><td>1 scf = 0.000001 MMscf</td></tr>
+    </table>
+
+    <!-- RESERVOIR VOLUME -->
+    <h2> Reservoir Volume Conversions</h2>
+    <table>
+        <tr><th>From</th><th>To</th><th>Conversion</th></tr>
+        <tr><td>acre-ft</td><td>bbl</td><td>1 acre-ft = 7758 bbl</td></tr>
+        <tr><td>bbl</td><td>acre-ft</td><td>1 bbl = 0.0001289 acre-ft</td></tr>
+        <tr><td>acre-ft</td><td>m³</td><td>1 acre-ft = 1233.48 m³</td></tr>
+        <tr><td>m³</td><td>acre-ft</td><td>1 m³ = 0.000811 acre-ft</td></tr>
+    </table>
+
+    <!-- PVT PROPERTIES -->
+    <h2> PVT & Reservoir Properties</h2>
+    <table>
+        <tr><th>Property</th><th>Unit</th></tr>
+        <tr><td>Porosity (φ)</td><td>fraction or %</td></tr>
+        <tr><td>Permeability (k)</td><td>Darcy (D) / mD</td></tr>
+        <tr><td>Oil FVF (Bo)</td><td>RB/STB</td></tr>
+        <tr><td>Gas FVF (Bg)</td><td>RB/scf</td></tr>
+        <tr><td>Water FVF (Bw)</td><td>RB/STB</td></tr>
+        <tr><td>Solution GOR (Rs)</td><td>scf/STB</td></tr>
+        <tr><td>Z-factor</td><td>dimensionless</td></tr>
+    </table>
+
+    <div class="note">
+        <strong>Engineering Note:</strong><br>
+        All Material Balance Equation calculations require consistent unit systems.
+        Always ensure pressure, volume, and PVT properties are converted before computation.
+    </div>
+
+    <a href="{% url 'home' %}">← Back to Dashboard</a>
+
+</div>
+
+<style>
+
+    .container{
+        color: black;
+        max-width:1100px;
+        margin:40px auto;
+        background:white;
+        padding:30px;
+        border-radius:10px;
+        box-shadow:0 2px 10px rgba(0,0,0,0.08);
+        font-family:Arial;
+    }
+
+    h1{
+        text-align:center;
+        margin-bottom:20px;
+    }
+
+    h2{
+        margin-top:30px;
+        border-bottom:2px solid #eee;
+        padding-bottom:5px;
+    }
+
+    table{
+        width:100%;
+        border-collapse:collapse;
+        margin-top:10px;
+    }
+
+    th, td{
+        border:1px solid #ddd;
+        padding:10px;
+        text-align:left;
+    }
+
+    th{
+        background:#2d6cdf;
+        color:white;
+    }
+
+    .formula{
+        text-align:center;
+        background:#f0f2f5;
+        padding:10px;
+        border-radius:6px;
+        margin-bottom:20px;
+    }
+
+    .note{
+        margin-top:20px;
+        padding:15px;
+        background:#f8f9fa;
+        border-left:5px solid #2d6cdf;
+    }
+
+</style>
+
+{% endblock %}

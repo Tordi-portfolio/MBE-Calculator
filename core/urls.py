@@ -3,7 +3,13 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name='home'),
-       path(
+    path("unit-reference/", views.unit_reference, name="unit_reference"),
+    path(
+        "unit-converter/",
+        views.unit_converter,
+        name="unit_converter"
+    ),
+    path(
         'underground-withdrawal/',
         views.underground_withdrawal,
         name='underground_withdrawal'
@@ -62,5 +68,45 @@ urlpatterns = [
         "fetkovich/",
         views.fetkovich_water_influx,
         name="fetkovich"
+    ),
+    path(
+        "gas-material-balance/",
+        views.gas_material_balance,
+        name="gas_material_balance"
+    ),
+    path(
+        "volumetric-oil-reservoir/",
+        views.volumetric_oil_reservoir,
+        name="volumetric_oil_reservoir"
+    ),
+    path(
+        "gas-cap-drive-reservoir/",
+        views.gas_cap_drive_reservoir,
+        name="gas_cap_drive_reservoir"
+    ),
+    path(
+        "water-drive-reservoir/",
+        views.water_drive_reservoir,
+        name="water_drive_reservoir"
+    ),
+    path(
+        "combination-drive-reservoir/",
+        views.combination_drive_reservoir,
+        name="combination_drive_reservoir"
+    ),
+    path(
+        "oil-expansion-term/",
+        views.oil_expansion_term,
+        name="oil_expansion_term"
+    ),
+    path(
+        "oil-fvf/",
+        views.oil_fvf,
+        name="oil_fvf"
+    ),
+    path(
+        "unit-converter/",
+        views.unit_converter,
+        name="unit_converter"
     ),
 ]

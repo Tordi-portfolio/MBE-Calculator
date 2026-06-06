@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Gas Cap Expansion Term (Eg)
+Volumetric Oil Reservoir (OOIP)
 {% endblock %}
 
 {% block content %}
@@ -10,7 +10,7 @@ Gas Cap Expansion Term (Eg)
 
         body{
             background:#f5f7fb;
-            font-family: Arial, sans-serif;
+            font-family:Arial,sans-serif;
             margin:0;
             padding:0;
             color:#222;
@@ -27,31 +27,32 @@ Gas Cap Expansion Term (Eg)
 
         h1{
             text-align:center;
-            font-size:26px;
+            font-size:28px;
+            margin-bottom:20px;
         }
 
         .formula{
             text-align:center;
-            font-size:18px;
             background:#f0f2f5;
-            padding:10px;
+            padding:15px;
             border-radius:6px;
             margin-bottom:25px;
+            font-size:18px;
         }
 
         label{
-            font-size:14px;
+            display:block;
+            margin-bottom:5px;
             font-weight:600;
         }
 
         input{
             width:100%;
             padding:10px;
-            margin-top:5px;
             margin-bottom:15px;
             border:1px solid #ccc;
             border-radius:6px;
-            font-size:14px;
+            box-sizing:border-box;
         }
 
         button{
@@ -61,8 +62,8 @@ Gas Cap Expansion Term (Eg)
             color:white;
             border:none;
             border-radius:6px;
-            font-size:15px;
             cursor:pointer;
+            font-size:15px;
         }
 
         button:hover{
@@ -78,47 +79,59 @@ Gas Cap Expansion Term (Eg)
 
         a{
             display:inline-block;
-            margin-top:15px;
-            color:#2d6cdf;
+            margin-top:20px;
             text-decoration:none;
+            color:#2d6cdf;
         }
 
     </style>
-
-</head>
 
 <body>
 
 <div class="container">
 
-    <h1>Gas Cap Expansion Term (Eg)</h1>
+    <h1>Volumetric Oil Reservoir (OOIP)</h1>
 
     <div class="formula">
-        Eg = Boi ( (Bg / Bgi) − 1 )
+        N = (7758 × A × h × φ × (1 − Swi)) / Boi
     </div>
 
     <form method="POST">
 
         {% csrf_token %}
 
-        <label>Initial Oil FVF (Boi)</label>
+        <label>Reservoir Area, A (acres)</label>
+        <input type="number" step="any" name="A" required>
+
+        <label>Net Pay Thickness, h (ft)</label>
+        <input type="number" step="any" name="h" required>
+
+        <label>Porosity, φ (fraction)</label>
+        <input type="number" step="any" name="phi" required>
+
+        <label>Initial Water Saturation, Swi</label>
+        <input type="number" step="any" name="Swi" required>
+
+        <label>Initial Oil FVF, Boi</label>
         <input type="number" step="any" name="Boi" required>
 
-        <label>Gas FVF (Bg)</label>
-        <input type="number" step="any" name="Bg" required>
-
-        <label>Initial Gas FVF (Bgi)</label>
-        <input type="number" step="any" name="Bgi" required>
-
-        <button type="submit">Calculate Eg</button>
+        <button type="submit">
+            Calculate OOIP
+        </button>
 
     </form>
 
     {% if result is not None %}
 
     <div class="result">
-        <h3>Result</h3>
-        <p><strong>Eg =</strong> {{ result }} {{ unit }}</p>
+
+        <h3>Calculation Result</h3>
+
+        <p>
+            <strong>Original Oil In Place (OOIP):</strong>
+            {{ result }} {{ unit }}
+        </p>
+
     </div>
 
     {% endif %}

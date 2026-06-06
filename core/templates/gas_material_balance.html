@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Gas Cap Expansion Term (Eg)
+Gas Material Balance Equation
 {% endblock %}
 
 {% block content %}
@@ -10,7 +10,7 @@ Gas Cap Expansion Term (Eg)
 
         body{
             background:#f5f7fb;
-            font-family: Arial, sans-serif;
+            font-family:Arial,sans-serif;
             margin:0;
             padding:0;
             color:#222;
@@ -28,29 +28,32 @@ Gas Cap Expansion Term (Eg)
         h1{
             text-align:center;
             font-size:26px;
+            margin-bottom:20px;
         }
 
         .formula{
             text-align:center;
-            font-size:18px;
             background:#f0f2f5;
-            padding:10px;
+            padding:15px;
             border-radius:6px;
             margin-bottom:25px;
+            font-size:18px;
         }
 
         label{
-            font-size:14px;
+            display:block;
+            margin-bottom:5px;
             font-weight:600;
+            font-size:14px;
         }
 
         input{
             width:100%;
             padding:10px;
-            margin-top:5px;
             margin-bottom:15px;
             border:1px solid #ccc;
             border-radius:6px;
+            box-sizing:border-box;
             font-size:14px;
         }
 
@@ -61,8 +64,8 @@ Gas Cap Expansion Term (Eg)
             color:white;
             border:none;
             border-radius:6px;
-            font-size:15px;
             cursor:pointer;
+            font-size:15px;
         }
 
         button:hover{
@@ -76,49 +79,65 @@ Gas Cap Expansion Term (Eg)
             border-left:5px solid #2d6cdf;
         }
 
+        .result h3{
+            margin-top:0;
+        }
+
         a{
             display:inline-block;
-            margin-top:15px;
-            color:#2d6cdf;
+            margin-top:20px;
             text-decoration:none;
+            color:#2d6cdf;
         }
 
     </style>
-
-</head>
 
 <body>
 
 <div class="container">
 
-    <h1>Gas Cap Expansion Term (Eg)</h1>
+    <h1>Gas Material Balance Equation</h1>
 
     <div class="formula">
-        Eg = Boi ( (Bg / Bgi) − 1 )
+        G = Gp / [1 − (p/Z)/(Pi/Zi)]
     </div>
 
     <form method="POST">
 
         {% csrf_token %}
 
-        <label>Initial Oil FVF (Boi)</label>
-        <input type="number" step="any" name="Boi" required>
+        <label>Current Pressure (p)</label>
+        <input type="number" step="any" name="p" required>
 
-        <label>Gas FVF (Bg)</label>
-        <input type="number" step="any" name="Bg" required>
+        <label>Current Gas Compressibility Factor (Z)</label>
+        <input type="number" step="any" name="z" required>
 
-        <label>Initial Gas FVF (Bgi)</label>
-        <input type="number" step="any" name="Bgi" required>
+        <label>Initial Pressure (Pi)</label>
+        <input type="number" step="any" name="pi" required>
 
-        <button type="submit">Calculate Eg</button>
+        <label>Initial Gas Compressibility Factor (Zi)</label>
+        <input type="number" step="any" name="zi" required>
+
+        <label>Cumulative Gas Produced (Gp)</label>
+        <input type="number" step="any" name="Gp" required>
+
+        <button type="submit">
+            Calculate OGIP Using Gas MBE
+        </button>
 
     </form>
 
     {% if result is not None %}
 
     <div class="result">
-        <h3>Result</h3>
-        <p><strong>Eg =</strong> {{ result }} {{ unit }}</p>
+
+        <h3>Calculation Result</h3>
+
+        <p>
+            <strong>Original Gas In Place (G):</strong>
+            {{ result }} {{ unit }}
+        </p>
+
     </div>
 
     {% endif %}
