@@ -1,133 +1,363 @@
 {% extends 'base.html' %}
 
-{% block title %}
-Original Gas In Place (OGIP)
-{% endblock %}
+{% block title %}Original Gas In Place (OGIP) — MBE Solver{% endblock %}
 
 {% block content %}
 
-    <style>
+<style>
 
-        body{
-            background:#f5f7fb;
-            font-family:Arial,sans-serif;
-            margin:0;
-            padding:0;
-            color:#222;
+    /* ── Page layout ── */
+    .page-wrap {
+        max-width: 680px;
+        margin: 0 auto;
+    }
+
+    /* ── Breadcrumb ── */
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-bottom: 24px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    .breadcrumb a {
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+    .breadcrumb a:hover {
+        color: var(--accent);
+    }
+
+    .breadcrumb .sep {
+        color: var(--border);
+    }
+
+    .breadcrumb .current {
+        color: var(--accent);
+    }
+
+    /* ── Card ── */
+    .calc-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    /* ── Card header ── */
+    .card-header {
+        padding: 28px 32px 22px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .card-header .eyebrow {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 8px;
+    }
+
+    .card-header h1 {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--text-primary);
+        line-height: 1.2;
+    }
+
+    /* ── Formula strip ── */
+    .formula-strip {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin: 22px 32px;
+        background: var(--bg-deep);
+        border: 1px solid var(--border-accent);
+        border-radius: 10px;
+        padding: 16px 20px;
+    }
+
+    .formula-bar {
+        width: 3px;
+        height: 44px;
+        background: var(--accent);
+        border-radius: 2px;
+        flex-shrink: 0;
+    }
+
+    .formula-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 5px;
+    }
+
+    .formula-eq {
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--text-primary);
+        letter-spacing: 0.05em;
+        font-family: "Courier New", monospace;
+    }
+
+    .formula-eq em {
+        color: var(--accent);
+        font-style: normal;
+    }
+
+    /* ── Form body ── */
+    .card-body {
+        padding: 4px 32px 30px;
+    }
+
+    .field-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .field-group {
+        margin-bottom: 18px;
+    }
+
+    .field-group label {
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+        margin-bottom: 8px;
+    }
+
+    .field-group input {
+        width: 100%;
+        padding: 11px 14px;
+        background: var(--bg-deep);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text-primary);
+        font-size: 15px;
+        font-family: "Segoe UI", Arial, sans-serif;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        -moz-appearance: textfield;
+    }
+
+    .field-group input::-webkit-outer-spin-button,
+    .field-group input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+
+    .field-group input::placeholder {
+        color: var(--text-muted);
+        font-size: 13px;
+    }
+
+    .field-group input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.12);
+    }
+
+    /* ── Submit button ── */
+    .submit-btn {
+        width: 100%;
+        padding: 13px;
+        background: var(--accent);
+        color: #0b1220;
+        font-size: 14px;
+        font-weight: 700;
+        font-family: "Segoe UI", Arial, sans-serif;
+        letter-spacing: 0.04em;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 4px;
+        transition: background 0.2s, transform 0.1s;
+    }
+
+    .submit-btn:hover {
+        background: var(--accent-hover);
+    }
+
+    .submit-btn:active {
+        transform: scale(0.98);
+    }
+
+    /* ── Result box ── */
+    .result-box {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-top: 20px;
+        background: var(--bg-deep);
+        border: 1px solid var(--border-accent);
+        border-radius: 10px;
+        padding: 18px 22px;
+    }
+
+    .result-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--accent);
+        flex-shrink: 0;
+        box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+    }
+
+    .result-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 5px;
+    }
+
+    .result-value {
+        font-size: 26px;
+        font-weight: 700;
+        color: var(--accent);
+        font-family: "Courier New", monospace;
+        line-height: 1.1;
+    }
+
+    .result-value span {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-secondary);
+        font-family: "Segoe UI", Arial, sans-serif;
+        margin-left: 6px;
+    }
+
+    /* ── Back link ── */
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--text-muted);
+        font-size: 13px;
+        text-decoration: none;
+        margin-top: 22px;
+        transition: color 0.2s;
+    }
+
+    .back-link:hover {
+        color: var(--accent);
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 600px) {
+
+        .card-header,
+        .card-body {
+            padding-left: 20px;
+            padding-right: 20px;
         }
 
-        .container{
-            max-width:850px;
-            margin:50px auto;
-            background:white;
-            padding:30px;
-            border-radius:10px;
-            box-shadow:0 2px 10px rgba(0,0,0,0.08);
+        .formula-strip {
+            margin-left: 20px;
+            margin-right: 20px;
         }
 
-        h1{
-            text-align:center;
-            font-size:26px;
+        .field-row {
+            grid-template-columns: 1fr;
         }
 
-        .formula{
-            text-align:center;
-            background:#f0f2f5;
-            padding:12px;
-            border-radius:6px;
-            margin-bottom:25px;
-            font-size:18px;
+        .formula-eq {
+            font-size: 16px;
         }
+    }
 
-        label{
-            font-weight:600;
-            font-size:14px;
-        }
+</style>
 
-        input{
-            width:100%;
-            padding:10px;
-            margin-top:5px;
-            margin-bottom:15px;
-            border:1px solid #ccc;
-            border-radius:6px;
-        }
+<div class="page-wrap">
 
-        button{
-            width:100%;
-            padding:12px;
-            background:#2d6cdf;
-            color:white;
-            border:none;
-            border-radius:6px;
-            cursor:pointer;
-        }
-
-        .result{
-            margin-top:20px;
-            padding:15px;
-            background:#f8f9fa;
-            border-left:5px solid #2d6cdf;
-        }
-
-        a{
-            text-decoration:none;
-            color:#2d6cdf;
-            display:inline-block;
-            margin-top:15px;
-        }
-
-    </style>
-
-<body>
-
-<div class="container">
-
-    <h1>Original Gas In Place (OGIP)</h1>
-
-    <div class="formula">
-        G = (P × V) / (Z × T)
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <a href="/">Home</a>
+        <span class="sep">›</span>
+        <span class="current">Original Gas In Place</span>
     </div>
 
-    <form method="POST">
+    <div class="calc-card">
 
-        {% csrf_token %}
+        <!-- Header -->
+        <div class="card-header">
+            <div class="eyebrow">Gas Reservoir · Volumetric Method</div>
+            <h1>Original Gas In Place (OGIP)</h1>
+        </div>
 
-        <label>Pressure (P)</label>
-        <input type="number" step="any" name="P" required>
+        <!-- Formula -->
+        <div class="formula-strip">
+            <div class="formula-bar"></div>
+            <div>
+                <div class="formula-label">Formula</div>
+                <div class="formula-eq">
+                    <em>G</em> = (P × V) / (Z × T)
+                </div>
+            </div>
+        </div>
 
-        <label>Reservoir Volume (V)</label>
-        <input type="number" step="any" name="V" required>
+        <!-- Form -->
+        <div class="card-body">
 
-        <label>Gas Compressibility Factor (Z)</label>
-        <input type="number" step="any" name="Z" required>
+            <form method="POST">
+                {% csrf_token %}
 
-        <label>Temperature (T)</label>
-        <input type="number" step="any" name="T" required>
+                <div class="field-row">
+                    <div class="field-group">
+                        <label for="P">Pressure (P)</label>
+                        <input type="number" step="any" id="P" name="P" placeholder="e.g. 3500" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="V">Reservoir Volume (V)</label>
+                        <input type="number" step="any" id="V" name="V" placeholder="e.g. 1200" required>
+                    </div>
+                </div>
 
-        <button type="submit">
-            Calculate OGIP
-        </button>
+                <div class="field-row">
+                    <div class="field-group">
+                        <label for="Z">Compressibility Factor (Z)</label>
+                        <input type="number" step="any" id="Z" name="Z" placeholder="e.g. 0.85" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="T">Temperature (T)</label>
+                        <input type="number" step="any" id="T" name="T" placeholder="e.g. 620" required>
+                    </div>
+                </div>
 
-    </form>
+                <button type="submit" class="submit-btn">Calculate OGIP</button>
 
-    {% if result is not None %}
+            </form>
 
-    <div class="result">
+            {% if result is not None %}
+            <div class="result-box">
+                <div class="result-dot"></div>
+                <div>
+                    <div class="result-label">OGIP Result</div>
+                    <div class="result-value">
+                        {{ result }}<span>{{ unit }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
 
-        <h3>Result</h3>
+            <a href="/" class="back-link">← Back to Dashboard</a>
 
-        <p>
-            <strong>OGIP =</strong> {{ result }} {{ unit }}
-        </p>
+        </div>
 
     </div>
-
-    {% endif %}
-
-    <a href="/">← Back to Dashboard</a>
 
 </div>
 
-</body>
 {% endblock %}

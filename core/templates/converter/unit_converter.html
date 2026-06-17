@@ -1,177 +1,390 @@
 {% extends 'base.html' %}
 
-{% block title %}
-MBE Unit Converter
-{% endblock %}
+{% block title %}MBE Unit Converter — MBE Solver{% endblock %}
 
 {% block content %}
 
-    <style>
+<style>
 
-        body{
-            background:#f5f7fb;
-            font-family:Arial,sans-serif;
-            margin:0;
-            padding:0;
-            color:#222;
-        }
+    .page-wrap { max-width: 680px; margin: 0 auto; }
 
-        .container{
-            max-width:850px;
-            margin:50px auto;
-            background:white;
-            padding:30px;
-            border-radius:10px;
-            box-shadow:0 2px 10px rgba(0,0,0,0.08);
-        }
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-bottom: 24px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
 
-        h1{
-            text-align:center;
-            font-size:28px;
-            margin-bottom:20px;
-        }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover  { color: var(--accent); }
+    .breadcrumb .sep     { color: var(--border); }
+    .breadcrumb .current { color: var(--accent); }
 
-        .formula{
-            text-align:center;
-            background:#f0f2f5;
-            padding:15px;
-            border-radius:6px;
-            margin-bottom:25px;
-            font-size:16px;
-        }
+    .calc-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        overflow: hidden;
+    }
 
-        label{
-            display:block;
-            margin-bottom:5px;
-            font-weight:600;
-        }
+    .card-header {
+        padding: 28px 32px 22px;
+        border-bottom: 1px solid var(--border);
+    }
 
-        input, select{
-            width:100%;
-            padding:10px;
-            margin-bottom:15px;
-            border:1px solid #ccc;
-            border-radius:6px;
-            box-sizing:border-box;
-        }
+    .card-header .eyebrow {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 8px;
+    }
 
-        button{
-            width:100%;
-            padding:12px;
-            background:#2d6cdf;
-            color:white;
-            border:none;
-            border-radius:6px;
-            cursor:pointer;
-            font-size:15px;
-        }
+    .card-header h1 {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--text-primary);
+        line-height: 1.2;
+    }
 
-        button:hover{
-            background:#1f56b3;
-        }
+    .formula-strip {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin: 22px 32px;
+        background: var(--bg-deep);
+        border: 1px solid var(--border-accent);
+        border-radius: 10px;
+        padding: 16px 20px;
+    }
 
-        .result{
-            margin-top:20px;
-            padding:15px;
-            background:#f8f9fa;
-            border-left:5px solid #2d6cdf;
-        }
+    .formula-bar {
+        width: 3px;
+        min-height: 44px;
+        background: var(--accent);
+        border-radius: 2px;
+        flex-shrink: 0;
+    }
 
-        a{
-            display:inline-block;
-            margin-top:20px;
-            text-decoration:none;
-            color:#2d6cdf;
-        }
+    .formula-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 6px;
+    }
 
-    </style>
+    .formula-eq {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text-primary);
+        letter-spacing: 0.01em;
+        font-family: "Segoe UI", Arial, sans-serif;
+        line-height: 1.5;
+    }
 
-</head>
+    .formula-eq em { color: var(--accent); font-style: normal; }
 
-<body>
+    .card-body { padding: 4px 32px 30px; }
 
-<div class="container">
+    .field-section-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        padding-bottom: 10px;
+        margin-bottom: 4px;
+        border-bottom: 1px solid var(--border);
+        margin-top: 6px;
+    }
 
-    <h1>MBE Unit Converter</h1>
+    .field-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
 
-    <div class="formula">
-        Convert Petroleum Engineering Units (Pressure, Temperature, Volume)
+    .field-group { margin-bottom: 18px; }
+
+    .field-group label {
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+        margin-bottom: 6px;
+    }
+
+    .field-hint {
+        font-size: 10px;
+        color: var(--text-muted);
+        font-weight: 400;
+        letter-spacing: 0;
+        text-transform: none;
+        margin-top: -2px;
+        margin-bottom: 8px;
+    }
+
+    .field-group input,
+    .field-group select {
+        width: 100%;
+        padding: 11px 14px;
+        background: var(--bg-deep);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text-primary);
+        font-size: 15px;
+        font-family: "Segoe UI", Arial, sans-serif;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        -moz-appearance: textfield;
+    }
+
+    .field-group select {
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%2394a3b8' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+        padding-right: 36px;
+        cursor: pointer;
+    }
+
+    .field-group select option {
+        background: var(--bg-surface);
+        color: var(--text-primary);
+    }
+
+    .field-group select optgroup {
+        background: var(--bg-deep);
+        color: var(--text-muted);
+        font-style: normal;
+        font-weight: 700;
+        font-size: 11px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+
+    .field-group input::-webkit-outer-spin-button,
+    .field-group input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+    .field-group input::placeholder { color: var(--text-muted); font-size: 13px; }
+
+    .field-group input:focus,
+    .field-group select:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.12);
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 13px;
+        background: var(--accent);
+        color: #0b1220;
+        font-size: 14px;
+        font-weight: 700;
+        font-family: "Segoe UI", Arial, sans-serif;
+        letter-spacing: 0.04em;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 4px;
+        transition: background 0.2s, transform 0.1s;
+    }
+
+    .submit-btn:hover  { background: var(--accent-hover); }
+    .submit-btn:active { transform: scale(0.98); }
+
+    .result-box {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-top: 20px;
+        background: var(--bg-deep);
+        border: 1px solid var(--border-accent);
+        border-radius: 10px;
+        padding: 18px 22px;
+    }
+
+    .result-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--accent);
+        flex-shrink: 0;
+        box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+    }
+
+    .result-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 5px;
+    }
+
+    .result-value {
+        font-size: 26px;
+        font-weight: 700;
+        color: var(--accent);
+        font-family: "Courier New", monospace;
+        line-height: 1.1;
+    }
+
+    .result-value span {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-secondary);
+        font-family: "Segoe UI", Arial, sans-serif;
+        margin-left: 6px;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--text-muted);
+        font-size: 13px;
+        text-decoration: none;
+        margin-top: 22px;
+        transition: color 0.2s;
+    }
+
+    .back-link:hover { color: var(--accent); }
+
+    @media (max-width: 600px) {
+        .card-header, .card-body { padding-left: 18px; padding-right: 18px; }
+        .formula-strip { margin-left: 18px; margin-right: 18px; }
+        .field-row { grid-template-columns: 1fr; }
+    }
+
+</style>
+
+<div class="page-wrap">
+
+    <div class="breadcrumb">
+        <a href="/">Home</a>
+        <span class="sep">›</span>
+        <a href="/">Tools</a>
+        <span class="sep">›</span>
+        <span class="current">Unit Converter</span>
     </div>
 
-    <form method="POST">
+    <div class="calc-card">
 
-        {% csrf_token %}
+        <div class="card-header">
+            <div class="eyebrow">Tools · Reference</div>
+            <h1>MBE Unit Converter</h1>
+        </div>
 
-        <label>Value</label>
-        <input type="number" step="any" name="value" required>
+        <div class="formula-strip">
+            <div class="formula-bar"></div>
+            <div>
+                <div class="formula-label">Scope</div>
+                <div class="formula-eq">
+                    Convert petroleum engineering units across <em>pressure</em>, <em>temperature</em>, and <em>volume</em>
+                </div>
+            </div>
+        </div>
 
-        <label>Conversion Type</label>
-        <select name="conversion_type" required>
+        <div class="card-body">
 
-            <!-- PRESSURE -->
-            <option value="psi_to_kpa">PSI → kPa</option>
-            <option value="kpa_to_psi">kPa → PSI</option>
-            <option value="bar_to_psi">Bar → PSI</option>
-            <option value="psi_to_bar">PSI → Bar</option>
-            <option value="atm_to_psi">ATM → PSI</option>
-            <option value="psi_to_atm">PSI → ATM</option>
+            <form method="POST">
+                {% csrf_token %}
 
-            <!-- TEMPERATURE -->
-            <option value="f_to_r">°F → °R</option>
-            <option value="r_to_f">°R → °F</option>
-            <option value="c_to_k">°C → K</option>
-            <option value="k_to_c">K → °C</option>
+                <p class="field-section-label">Input</p>
 
-            <!-- OIL VOLUME -->
-            <option value="m3_to_bbl">m³ → bbl</option>
-            <option value="bbl_to_m3">bbl → m³</option>
-            <option value="bbl_to_stb">bbl → STB</option>
-            <option value="stb_to_bbl">STB → bbl</option>
+                <div class="field-group">
+                    <label for="value">Value</label>
+                    <p class="field-hint">The number you want to convert</p>
+                    <input type="number" step="any" id="value" name="value" placeholder="e.g. 2500" required>
+                </div>
 
-            <!-- GAS VOLUME -->
-            <option value="scf_to_m3">scf → m³</option>
-            <option value="m3_to_scf">m³ → scf</option>
-            <option value="mscf_to_scf">Mscf → scf</option>
-            <option value="scf_to_mscf">scf → Mscf</option>
-            <option value="mmscfto_scf">MMscf → scf</option>
-            <option value="scf_to_mmscft">scf → MMscf</option>
+                <p class="field-section-label">Conversion</p>
 
-            <!-- RESERVOIR VOLUME -->
-            <option value="acreft_to_bbl">acre-ft → bbl</option>
-            <option value="bbl_to_acreft">bbl → acre-ft</option>
-            <option value="acreft_to_m3">acre-ft → m³</option>
-            <option value="m3_to_acreft">m³ → acre-ft</option>
+                <div class="field-group">
+                    <label for="conversion_type">Conversion Type</label>
+                    <p class="field-hint">Choose the unit pair</p>
+                    <select id="conversion_type" name="conversion_type" required>
 
-            <!-- BASIC SI -->
-            <option value="psi_to_pa">psi → Pa</option>
-            <option value="pa_to_psi">Pa → psi</option>
+                        <optgroup label="Pressure">
+                            <option value="psi_to_kpa">PSI → kPa</option>
+                            <option value="kpa_to_psi">kPa → PSI</option>
+                            <option value="bar_to_psi">Bar → PSI</option>
+                            <option value="psi_to_bar">PSI → Bar</option>
+                            <option value="atm_to_psi">ATM → PSI</option>
+                            <option value="psi_to_atm">PSI → ATM</option>
+                        </optgroup>
 
-        </select>
+                        <optgroup label="Temperature">
+                            <option value="f_to_r">°F → °R</option>
+                            <option value="r_to_f">°R → °F</option>
+                            <option value="c_to_k">°C → K</option>
+                            <option value="k_to_c">K → °C</option>
+                        </optgroup>
 
-        <button type="submit">
-            Convert Unit
-        </button>
+                        <optgroup label="Oil Volume">
+                            <option value="m3_to_bbl">m³ → bbl</option>
+                            <option value="bbl_to_m3">bbl → m³</option>
+                            <option value="bbl_to_stb">bbl → STB</option>
+                            <option value="stb_to_bbl">STB → bbl</option>
+                        </optgroup>
 
-    </form>
+                        <optgroup label="Gas Volume">
+                            <option value="scf_to_m3">scf → m³</option>
+                            <option value="m3_to_scf">m³ → scf</option>
+                            <option value="mscf_to_scf">Mscf → scf</option>
+                            <option value="scf_to_mscf">scf → Mscf</option>
+                            <option value="mmscfto_scf">MMscf → scf</option>
+                            <option value="scf_to_mmscft">scf → MMscf</option>
+                        </optgroup>
 
-    {% if result is not None %}
+                        <optgroup label="Reservoir Volume">
+                            <option value="acreft_to_bbl">acre-ft → bbl</option>
+                            <option value="bbl_to_acreft">bbl → acre-ft</option>
+                            <option value="acreft_to_m3">acre-ft → m³</option>
+                            <option value="m3_to_acreft">m³ → acre-ft</option>
+                        </optgroup>
 
-    <div class="result">
+                        <optgroup label="Basic SI">
+                            <option value="psi_to_pa">psi → Pa</option>
+                            <option value="pa_to_psi">Pa → psi</option>
+                        </optgroup>
 
-        <h3>Result</h3>
+                    </select>
+                </div>
 
-        <p>
-            <strong>Converted Value:</strong>
-            {{ result }} {{ unit }}
-        </p>
+                <button type="submit" class="submit-btn">Convert Unit</button>
+
+            </form>
+
+            {% if result is not None %}
+            <div class="result-box">
+                <div class="result-dot"></div>
+                <div>
+                    <div class="result-label">Converted Value</div>
+                    <div class="result-value">
+                        {{ result }}<span>{{ unit }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <a href="/" class="back-link">← Back to Dashboard</a>
+
+        </div>
 
     </div>
-
-    {% endif %}
-
-    <a href="/">← Back to Dashboard</a>
 
 </div>
 
-</body>
 {% endblock %}

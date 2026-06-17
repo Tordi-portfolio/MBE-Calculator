@@ -1,152 +1,339 @@
 {% extends 'base.html' %}
 
-{% block title %}
-MBE Unit Reference Table
-{% endblock %}
+{% block title %}MBE Unit Reference Table — MBE Solver{% endblock %}
 
 {% block content %}
 
-<div class="container">
-
-    <h1> MBE Unit Reference Table</h1>
-
-    <div class="formula">
-        Complete list of petroleum engineering unit conversions used in Material Balance Equation (MBE)
-    </div>
-
-    <!-- PRESSURE -->
-    <h2> Pressure Conversions</h2>
-    <table>
-        <tr><th>From</th><th>To</th><th>Conversion</th></tr>
-        <tr><td>psi</td><td>kPa</td><td>1 psi = 6.89476 kPa</td></tr>
-        <tr><td>kPa</td><td>psi</td><td>1 kPa = 0.145038 psi</td></tr>
-        <tr><td>bar</td><td>psi</td><td>1 bar = 14.5038 psi</td></tr>
-        <tr><td>psi</td><td>bar</td><td>1 psi = 0.0689476 bar</td></tr>
-        <tr><td>atm</td><td>psi</td><td>1 atm = 14.696 psi</td></tr>
-        <tr><td>psi</td><td>atm</td><td>1 psi = 0.068046 atm</td></tr>
-    </table>
-
-    <!-- TEMPERATURE -->
-    <h2> Temperature Conversions</h2>
-    <table>
-        <tr><th>From</th><th>To</th><th>Formula</th></tr>
-        <tr><td>°F</td><td>°R</td><td>T(°R) = T(°F) + 459.67</td></tr>
-        <tr><td>°R</td><td>°F</td><td>T(°F) = T(°R) − 459.67</td></tr>
-        <tr><td>°C</td><td>K</td><td>T(K) = T(°C) + 273.15</td></tr>
-        <tr><td>K</td><td>°C</td><td>T(°C) = T(K) − 273.15</td></tr>
-    </table>
-
-    <!-- OIL VOLUME -->
-    <h2> Oil Volume Conversions</h2>
-    <table>
-        <tr><th>From</th><th>To</th><th>Conversion</th></tr>
-        <tr><td>m³</td><td>bbl</td><td>1 m³ = 6.28981 bbl</td></tr>
-        <tr><td>bbl</td><td>m³</td><td>1 bbl = 0.158987 m³</td></tr>
-        <tr><td>bbl</td><td>STB</td><td>1 bbl ≈ 1 STB</td></tr>
-        <tr><td>STB</td><td>bbl</td><td>1 STB ≈ 1 bbl</td></tr>
-    </table>
-
-    <!-- GAS VOLUME -->
-    <h2> Gas Volume Conversions</h2>
-    <table>
-        <tr><th>From</th><th>To</th><th>Conversion</th></tr>
-        <tr><td>scf</td><td>m³</td><td>1 scf = 0.0283168 m³</td></tr>
-        <tr><td>m³</td><td>scf</td><td>1 m³ = 35.3147 scf</td></tr>
-        <tr><td>Mscf</td><td>scf</td><td>1 Mscf = 1,000 scf</td></tr>
-        <tr><td>MMscf</td><td>scf</td><td>1 MMscf = 1,000,000 scf</td></tr>
-        <tr><td>scf</td><td>Mscf</td><td>1 scf = 0.001 Mscf</td></tr>
-        <tr><td>scf</td><td>MMscf</td><td>1 scf = 0.000001 MMscf</td></tr>
-    </table>
-
-    <!-- RESERVOIR VOLUME -->
-    <h2> Reservoir Volume Conversions</h2>
-    <table>
-        <tr><th>From</th><th>To</th><th>Conversion</th></tr>
-        <tr><td>acre-ft</td><td>bbl</td><td>1 acre-ft = 7758 bbl</td></tr>
-        <tr><td>bbl</td><td>acre-ft</td><td>1 bbl = 0.0001289 acre-ft</td></tr>
-        <tr><td>acre-ft</td><td>m³</td><td>1 acre-ft = 1233.48 m³</td></tr>
-        <tr><td>m³</td><td>acre-ft</td><td>1 m³ = 0.000811 acre-ft</td></tr>
-    </table>
-
-    <!-- PVT PROPERTIES -->
-    <h2> PVT & Reservoir Properties</h2>
-    <table>
-        <tr><th>Property</th><th>Unit</th></tr>
-        <tr><td>Porosity (φ)</td><td>fraction or %</td></tr>
-        <tr><td>Permeability (k)</td><td>Darcy (D) / mD</td></tr>
-        <tr><td>Oil FVF (Bo)</td><td>RB/STB</td></tr>
-        <tr><td>Gas FVF (Bg)</td><td>RB/scf</td></tr>
-        <tr><td>Water FVF (Bw)</td><td>RB/STB</td></tr>
-        <tr><td>Solution GOR (Rs)</td><td>scf/STB</td></tr>
-        <tr><td>Z-factor</td><td>dimensionless</td></tr>
-    </table>
-
-    <div class="note">
-        <strong>Engineering Note:</strong><br>
-        All Material Balance Equation calculations require consistent unit systems.
-        Always ensure pressure, volume, and PVT properties are converted before computation.
-    </div>
-
-    <a href="{% url 'home' %}">← Back to Dashboard</a>
-
-</div>
-
 <style>
 
-    .container{
-        color: black;
-        max-width:1100px;
-        margin:40px auto;
-        background:white;
-        padding:30px;
-        border-radius:10px;
-        box-shadow:0 2px 10px rgba(0,0,0,0.08);
-        font-family:Arial;
+    .page-wrap-wide { max-width: 940px; margin: 0 auto; }
+
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-bottom: 24px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
     }
 
-    h1{
-        text-align:center;
-        margin-bottom:20px;
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover  { color: var(--accent); }
+    .breadcrumb .sep     { color: var(--border); }
+    .breadcrumb .current { color: var(--accent); }
+
+    .calc-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        overflow: hidden;
     }
 
-    h2{
-        margin-top:30px;
-        border-bottom:2px solid #eee;
-        padding-bottom:5px;
+    .card-header {
+        padding: 28px 32px 22px;
+        border-bottom: 1px solid var(--border);
     }
 
-    table{
-        width:100%;
-        border-collapse:collapse;
-        margin-top:10px;
+    .card-header .eyebrow {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 8px;
     }
 
-    th, td{
-        border:1px solid #ddd;
-        padding:10px;
-        text-align:left;
+    .card-header h1 {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--text-primary);
+        line-height: 1.2;
     }
 
-    th{
-        background:#2d6cdf;
-        color:white;
+    .formula-strip {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin: 22px 32px;
+        background: var(--bg-deep);
+        border: 1px solid var(--border-accent);
+        border-radius: 10px;
+        padding: 16px 20px;
     }
 
-    .formula{
-        text-align:center;
-        background:#f0f2f5;
-        padding:10px;
-        border-radius:6px;
-        margin-bottom:20px;
+    .formula-bar {
+        width: 3px;
+        min-height: 44px;
+        background: var(--accent);
+        border-radius: 2px;
+        flex-shrink: 0;
     }
 
-    .note{
-        margin-top:20px;
-        padding:15px;
-        background:#f8f9fa;
-        border-left:5px solid #2d6cdf;
+    .formula-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 6px;
+    }
+
+    .formula-eq {
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--text-primary);
+        letter-spacing: 0.01em;
+        font-family: "Segoe UI", Arial, sans-serif;
+        line-height: 1.5;
+    }
+
+    .card-body { padding: 4px 32px 36px; }
+
+    .section-block { margin-top: 30px; }
+    .section-block:first-child { margin-top: 6px; }
+
+    .section-title {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-primary);
+        padding-bottom: 10px;
+        margin-bottom: 14px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .section-title .count {
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: none;
+        color: var(--text-muted);
+    }
+
+    .ref-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--bg-deep);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .ref-table th, .ref-table td {
+        padding: 11px 16px;
+        text-align: left;
+        font-size: 13.5px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .ref-table th {
+        background: rgba(56, 189, 248, 0.08);
+        color: var(--accent);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+
+    .ref-table td {
+        color: var(--text-secondary);
+        font-family: "Courier New", monospace;
+    }
+
+    .ref-table td:first-child,
+    .ref-table th:first-child {
+        color: var(--text-primary);
+        font-family: "Segoe UI", Arial, sans-serif;
+        font-weight: 600;
+    }
+
+    .ref-table th:first-child { color: var(--accent); }
+
+    .ref-table tr:last-child td { border-bottom: none; }
+
+    .ref-table tr:hover td { background: rgba(56, 189, 248, 0.04); }
+
+    .note-box {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        margin-top: 32px;
+        background: var(--bg-deep);
+        border: 1px solid var(--border-accent);
+        border-radius: 10px;
+        padding: 18px 22px;
+    }
+
+    .note-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--accent);
+        flex-shrink: 0;
+        margin-top: 4px;
+        box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+    }
+
+    .note-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 6px;
+    }
+
+    .note-box p {
+        font-size: 13.5px;
+        color: var(--text-secondary);
+        line-height: 1.55;
+        margin: 0;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--text-muted);
+        font-size: 13px;
+        text-decoration: none;
+        margin-top: 26px;
+        transition: color 0.2s;
+    }
+
+    .back-link:hover { color: var(--accent); }
+
+    @media (max-width: 600px) {
+        .card-header, .card-body { padding-left: 18px; padding-right: 18px; }
+        .formula-strip { margin-left: 18px; margin-right: 18px; }
+        .ref-table { font-size: 12px; }
+        .ref-table th, .ref-table td { padding: 9px 10px; }
     }
 
 </style>
+
+<div class="page-wrap-wide">
+
+    <div class="breadcrumb">
+        <a href="/">Home</a>
+        <span class="sep">›</span>
+        <a href="/">Tools</a>
+        <span class="sep">›</span>
+        <span class="current">Unit Reference</span>
+    </div>
+
+    <div class="calc-card">
+
+        <div class="card-header">
+            <div class="eyebrow">Tools · Reference</div>
+            <h1>MBE Unit Reference Table</h1>
+        </div>
+
+        <div class="formula-strip">
+            <div class="formula-bar"></div>
+            <div>
+                <div class="formula-label">Scope</div>
+                <div class="formula-eq">
+                    Complete list of petroleum engineering unit conversions used in the Material Balance Equation
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+
+            <div class="section-block">
+                <div class="section-title">Pressure Conversions <span class="count">6 entries</span></div>
+                <table class="ref-table">
+                    <tr><th>From</th><th>To</th><th>Conversion</th></tr>
+                    <tr><td>psi</td><td>kPa</td><td>1 psi = 6.89476 kPa</td></tr>
+                    <tr><td>kPa</td><td>psi</td><td>1 kPa = 0.145038 psi</td></tr>
+                    <tr><td>bar</td><td>psi</td><td>1 bar = 14.5038 psi</td></tr>
+                    <tr><td>psi</td><td>bar</td><td>1 psi = 0.0689476 bar</td></tr>
+                    <tr><td>atm</td><td>psi</td><td>1 atm = 14.696 psi</td></tr>
+                    <tr><td>psi</td><td>atm</td><td>1 psi = 0.068046 atm</td></tr>
+                </table>
+            </div>
+
+            <div class="section-block">
+                <div class="section-title">Temperature Conversions <span class="count">4 entries</span></div>
+                <table class="ref-table">
+                    <tr><th>From</th><th>To</th><th>Formula</th></tr>
+                    <tr><td>°F</td><td>°R</td><td>T(°R) = T(°F) + 459.67</td></tr>
+                    <tr><td>°R</td><td>°F</td><td>T(°F) = T(°R) − 459.67</td></tr>
+                    <tr><td>°C</td><td>K</td><td>T(K) = T(°C) + 273.15</td></tr>
+                    <tr><td>K</td><td>°C</td><td>T(°C) = T(K) − 273.15</td></tr>
+                </table>
+            </div>
+
+            <div class="section-block">
+                <div class="section-title">Oil Volume Conversions <span class="count">4 entries</span></div>
+                <table class="ref-table">
+                    <tr><th>From</th><th>To</th><th>Conversion</th></tr>
+                    <tr><td>m³</td><td>bbl</td><td>1 m³ = 6.28981 bbl</td></tr>
+                    <tr><td>bbl</td><td>m³</td><td>1 bbl = 0.158987 m³</td></tr>
+                    <tr><td>bbl</td><td>STB</td><td>1 bbl ≈ 1 STB</td></tr>
+                    <tr><td>STB</td><td>bbl</td><td>1 STB ≈ 1 bbl</td></tr>
+                </table>
+            </div>
+
+            <div class="section-block">
+                <div class="section-title">Gas Volume Conversions <span class="count">6 entries</span></div>
+                <table class="ref-table">
+                    <tr><th>From</th><th>To</th><th>Conversion</th></tr>
+                    <tr><td>scf</td><td>m³</td><td>1 scf = 0.0283168 m³</td></tr>
+                    <tr><td>m³</td><td>scf</td><td>1 m³ = 35.3147 scf</td></tr>
+                    <tr><td>Mscf</td><td>scf</td><td>1 Mscf = 1,000 scf</td></tr>
+                    <tr><td>MMscf</td><td>scf</td><td>1 MMscf = 1,000,000 scf</td></tr>
+                    <tr><td>scf</td><td>Mscf</td><td>1 scf = 0.001 Mscf</td></tr>
+                    <tr><td>scf</td><td>MMscf</td><td>1 scf = 0.000001 MMscf</td></tr>
+                </table>
+            </div>
+
+            <div class="section-block">
+                <div class="section-title">Reservoir Volume Conversions <span class="count">4 entries</span></div>
+                <table class="ref-table">
+                    <tr><th>From</th><th>To</th><th>Conversion</th></tr>
+                    <tr><td>acre-ft</td><td>bbl</td><td>1 acre-ft = 7758 bbl</td></tr>
+                    <tr><td>bbl</td><td>acre-ft</td><td>1 bbl = 0.0001289 acre-ft</td></tr>
+                    <tr><td>acre-ft</td><td>m³</td><td>1 acre-ft = 1233.48 m³</td></tr>
+                    <tr><td>m³</td><td>acre-ft</td><td>1 m³ = 0.000811 acre-ft</td></tr>
+                </table>
+            </div>
+
+            <div class="section-block">
+                <div class="section-title">PVT & Reservoir Properties <span class="count">7 entries</span></div>
+                <table class="ref-table">
+                    <tr><th>Property</th><th>Unit</th></tr>
+                    <tr><td>Porosity (φ)</td><td>fraction or %</td></tr>
+                    <tr><td>Permeability (k)</td><td>Darcy (D) / mD</td></tr>
+                    <tr><td>Oil FVF (Bo)</td><td>RB/STB</td></tr>
+                    <tr><td>Gas FVF (Bg)</td><td>RB/scf</td></tr>
+                    <tr><td>Water FVF (Bw)</td><td>RB/STB</td></tr>
+                    <tr><td>Solution GOR (Rs)</td><td>scf/STB</td></tr>
+                    <tr><td>Z-factor</td><td>dimensionless</td></tr>
+                </table>
+            </div>
+
+            <div class="note-box">
+                <div class="note-dot"></div>
+                <div>
+                    <div class="note-label">Engineering Note</div>
+                    <p>All Material Balance Equation calculations require consistent unit systems. Always ensure pressure, volume, and PVT properties are converted before computation.</p>
+                </div>
+            </div>
+
+            <a href="{% url 'home' %}" class="back-link">← Back to Dashboard</a>
+
+        </div>
+
+    </div>
+
+</div>
 
 {% endblock %}

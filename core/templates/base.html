@@ -7,154 +7,425 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}MBE Solver{% endblock %}</title>
 
-    <!-- AOS ANIMATION -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            AOS.init({
-                duration: 900,
-                once: true,
-                offset: 80
-            });
+            AOS.init({ duration: 700, once: true, offset: 50 });
         });
     </script>
 
     <style>
 
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        body{
-            font-family: "Segoe UI", Arial, sans-serif;
-            background: #0b1220;
-            color: white;
-            min-height:100vh;
-            display:flex;
-            flex-direction:column;
+        :root {
+            --bg-base:        #0b1220;
+            --bg-surface:     #111827;
+            --bg-deep:        #0f172a;
+            --bg-sidebar:     #0d1526;
+            --border:         #1f2937;
+            --border-accent:  #1e3a4a;
+            --accent:         #38bdf8;
+            --accent-hover:   #7dd3fc;
+            --accent-glow:    rgba(56, 189, 248, 0.10);
+            --text-primary:   #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted:     #64748b;
+            --sidebar-w:      260px;
+            --topbar-h:       58px;
         }
 
-        /* ================= NAVBAR ================= */
-        .navbar{
-            position:sticky;
-            top:0;
-            z-index:1000;
-
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-
-            padding:15px 6%;
-            background: rgba(17, 24, 39, 0.85);
-            backdrop-filter: blur(12px);
-
-            box-shadow:0 5px 20px rgba(0,0,0,0.3);
+        html, body {
+            height: 100%;
         }
 
-        .logo{
-            font-size:1.3rem;
-            font-weight:bold;
-            color:#38bdf8;
-            text-decoration:none;
+        body {
+            font-family: "Segoe UI", system-ui, Arial, sans-serif;
+            background: var(--bg-base);
+            color: var(--text-primary);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        /* ================= NAV LINKS ================= */
-        .nav-links{
-            display:flex;
-            list-style:none;
-            gap:20px;
+        /* =============================================
+           TOP BAR
+        ============================================= */
+
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 200;
+            height: var(--topbar-h);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            background: rgba(11, 18, 32, 0.95);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
         }
 
-        .nav-links a{
-            text-decoration:none;
-            color:#e5e7eb;
-            font-weight:500;
-            font-size:14px;
-            transition:0.3s;
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .nav-links a:hover{
-            color:#38bdf8;
+        .sidebar-toggle {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            width: 36px;
+            height: 36px;
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            padding: 8px;
+            transition: border-color 0.2s, background 0.2s;
+            flex-shrink: 0;
         }
 
-        /* ================= HAMBURGER ================= */
-        .menu-btn{
-            display:none;
-            font-size:28px;
-            cursor:pointer;
-            color:white;
+        .sidebar-toggle span {
+            display: block;
+            height: 1.5px;
+            background: var(--text-secondary);
+            border-radius: 2px;
+            transition: background 0.2s, transform 0.3s, opacity 0.3s;
         }
 
-        /* ================= CONTENT ================= */
-        .container{
-            flex:1;
-            padding:25px;
-            width:100%;
-            max-width:1200px;
-            margin:auto;
+        .sidebar-toggle:hover {
+            border-color: var(--accent);
+            background: var(--accent-glow);
         }
 
-        /* ================= FOOTER ================= */
-        footer{
-            background:#0f172a;
-            text-align:center;
-            padding:15px;
-            border-top:1px solid #1f2937;
+        .sidebar-toggle:hover span {
+            background: var(--accent);
         }
 
-        footer p{
-            color:#94a3b8;
-            font-size:13px;
+        /* Animate to X when sidebar open */
+        body.sidebar-open .sidebar-toggle span:nth-child(1) {
+            transform: translateY(6.5px) rotate(45deg);
+        }
+        body.sidebar-open .sidebar-toggle span:nth-child(2) {
+            opacity: 0;
+        }
+        body.sidebar-open .sidebar-toggle span:nth-child(3) {
+            transform: translateY(-6.5px) rotate(-45deg);
         }
 
-        /* ================= MOBILE ================= */
-        @media(max-width: 900px){
+        .logo {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            white-space: nowrap;
+        }
 
-            .menu-btn{
-                display:block;
+        .logo .logo-word {
+            color: var(--text-primary);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .topbar-badge {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            color: var(--accent);
+            background: var(--accent-glow);
+            border: 1px solid var(--border-accent);
+            border-radius: 20px;
+            padding: 3px 10px;
+        }
+
+        /* =============================================
+           SIDEBAR
+        ============================================= */
+
+        .sidebar {
+            position: fixed;
+            top: var(--topbar-h);
+            left: 0;
+            bottom: 0;
+            width: var(--sidebar-w);
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            z-index: 150;
+            display: flex;
+            flex-direction: column;
+            transform: translateX(calc(-1 * var(--sidebar-w)));
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        body.sidebar-open .sidebar {
+            transform: translateX(0);
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4);
+        }
+
+        .sidebar-section-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            padding: 18px 18px 6px;
+        }
+
+        .sidebar-section-label:first-child {
+            padding-top: 14px;
+        }
+
+        .sidebar-scroll {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-bottom: 16px;
+        }
+
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0 10px;
+        }
+
+        .nav-links li {
+            margin-bottom: 2px;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 10px;
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.15s, background 0.15s;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .nav-links a .nav-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            flex-shrink: 0;
+            transition: background 0.15s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+            background: rgba(255,255,255,0.04);
+        }
+
+        .nav-links a:hover .nav-dot {
+            background: var(--accent);
+        }
+
+        .nav-links a.active {
+            color: var(--accent);
+            background: var(--accent-glow);
+            font-weight: 600;
+        }
+
+        .nav-links a.active .nav-dot {
+            background: var(--accent);
+        }
+
+        .nav-links a.nav-external {
+            color: var(--text-muted);
+        }
+
+        .nav-links a.nav-external:hover {
+            color: var(--accent);
+        }
+
+        /* divider between sections */
+        .nav-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 10px 10px;
+        }
+
+        /* Sidebar footer */
+        .sidebar-footer {
+            border-top: 1px solid var(--border);
+            padding: 14px 18px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-footer p {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .sidebar-footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* =============================================
+           OVERLAY (mobile)
+        ============================================= */
+
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 140;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(2px);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        body.sidebar-open .overlay {
+            display: block;
+            opacity: 1;
+        }
+
+        /* =============================================
+           MAIN CONTENT
+        ============================================= */
+
+        .main-wrap {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-top: var(--topbar-h);
+            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* On desktop, push content right when sidebar is open */
+        @media (min-width: 900px) {
+            body.sidebar-open .main-wrap {
+                margin-left: var(--sidebar-w);
+            }
+        }
+
+        .page-content {
+            flex: 1;
+            padding: 36px 32px;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* =============================================
+           FOOTER
+        ============================================= */
+
+        footer {
+            background: var(--bg-deep);
+            border-top: 1px solid var(--border);
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        footer p {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: var(--accent-hover);
+        }
+
+        .footer-badge {
+            font-size: 11px;
+            color: var(--text-muted);
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 3px 10px;
+        }
+
+        /* =============================================
+           RESPONSIVE — MOBILE
+        ============================================= */
+
+        @media (max-width: 899px) {
+
+            .topbar-badge {
+                display: none;
             }
 
-            .nav-links{
-                position:fixed;
-                top:65px;
-                left:0;
-                width:100%;
-
-                background:#111827;
-                flex-direction:column;
-
-                display:none;
-                padding:10px 0;
-
-                max-height:80vh;
-                overflow-y:auto;
-
-                border-top:1px solid #1f2937;
+            .page-content {
+                padding: 24px 16px;
             }
 
-            .nav-links.active{
-                display:flex;
-                animation: fadeDown 0.3s ease;
+            footer {
+                padding: 14px 16px;
+                justify-content: center;
+                text-align: center;
             }
 
-            .nav-links li{
-                padding:14px;
-                text-align:center;
-                border-bottom:1px solid #1f2937;
-            }
-
-            .nav-links a{
-                font-size:15px;
+            .footer-badge {
+                display: none;
             }
         }
 
-        @keyframes fadeDown{
-            from{opacity:0; transform:translateY(-10px);}
-            to{opacity:1; transform:translateY(0);}
+        @media (min-width: 900px) {
+
+            /* On desktop, sidebar can sit persistent when toggled */
+            .overlay {
+                display: none !important;
+            }
+        }
+
+        /* =============================================
+           ANIMATIONS
+        ============================================= */
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to   { opacity: 1; transform: translateX(0); }
         }
 
     </style>
@@ -162,109 +433,142 @@
 
 <body>
 
-    <!-- NAVBAR -->
-    <nav class="navbar">
+    <!-- ===== TOP BAR ===== -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <a href="{% url 'home' %}" class="logo">
+                 MBE <span class="logo-word">Solver</span>
+            </a>
+        </div>
+        <div class="topbar-right">
+            <span class="topbar-badge">Reservoir Engineering</span>
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}" style="font-size:13px; color:var(--text-secondary); text-decoration:none; padding: 5px 10px; border:1px solid var(--border); border-radius:6px; transition:color 0.2s, border-color 0.2s;"
+                   onmouseover="this.style.color='var(--accent)';this.style.borderColor='var(--accent)'"
+                   onmouseout="this.style.color='var(--text-secondary)';this.style.borderColor='var(--border)'">
+                    Logout
+                </a>
+            {% endif %}
+        </div>
+    </header>
 
-        <a href="{% url 'home' %}" class="logo">
-            🛢 MBE Solver
-        </a>
+    <!-- ===== OVERLAY (mobile tap-to-close) ===== -->
+    <div class="overlay" onclick="toggleSidebar()"></div>
 
-        <div class="menu-btn" onclick="toggleMenu()">
-            ☰
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar" id="sidebar" aria-label="Navigation">
+        <div class="sidebar-scroll">
+
+            <p class="sidebar-section-label">Main</p>
+            <ul class="nav-links">
+                <li><a href="{% url 'home' %}"><span class="nav-dot"></span>Home</a></li>
+                <li><a href="{% url 'unit_converter' %}"><span class="nav-dot"></span>Unit Converter</a></li>
+                <li><a href="{% url 'unit_reference' %}"><span class="nav-dot"></span>Unit Reference</a></li>
+            </ul>
+
+            <div class="nav-divider"></div>
+            <p class="sidebar-section-label">Reservoir Parameters</p>
+            <ul class="nav-links">
+                <li><a href="{% url 'underground_withdrawal' %}"><span class="nav-dot"></span>Underground Withdrawal</a></li>
+                <li><a href="{% url 'oil_expansion' %}"><span class="nav-dot"></span>Oil Expansion (Eo)</a></li>
+                <li><a href="{% url 'oil_expansion_term' %}"><span class="nav-dot"></span>Oil Expansion Term (Eo)</a></li>
+                <li><a href="{% url 'gas_cap_expansion' %}"><span class="nav-dot"></span>Gas Cap Expansion (Eg)</a></li>
+                <li><a href="{% url 'formation_water_expansion' %}"><span class="nav-dot"></span>Formation &amp; Water Expansion</a></li>
+                <li><a href="{% url 'gas_fvf' %}"><span class="nav-dot"></span>Gas FVF</a></li>
+                <li><a href="{% url 'oil_fvf' %}"><span class="nav-dot"></span>Oil FVF (Bo)</a></li>
+                <li><a href="{% url 'gas_cap_ratio' %}"><span class="nav-dot"></span>Gas Cap Ratio</a></li>
+            </ul>
+
+            <div class="nav-divider"></div>
+            <p class="sidebar-section-label">Material Balance</p>
+            <ul class="nav-links">
+                <li><a href="{% url 'general_mbe' %}"><span class="nav-dot"></span>General MBE (OOIP)</a></li>
+                <li><a href="{% url 'gas_material_balance' %}"><span class="nav-dot"></span>Gas Material Balance</a></li>
+                <li><a href="{% url 'ogip' %}"><span class="nav-dot"></span>Original Gas In Place</a></li>
+                <li><a href="{% url 'volumetric_oil_reservoir' %}"><span class="nav-dot"></span>Volumetric Oil Reservoir</a></li>
+                <li><a href="{% url 'recovery_factor' %}"><span class="nav-dot"></span>Recovery Factor</a></li>
+            </ul>
+
+            <div class="nav-divider"></div>
+            <p class="sidebar-section-label">Drive Mechanisms</p>
+            <ul class="nav-links">
+                <li><a href="{% url 'gas_cap_drive_reservoir' %}"><span class="nav-dot"></span>Gas Cap Drive</a></li>
+                <li><a href="{% url 'water_drive_reservoir' %}"><span class="nav-dot"></span>Water Drive</a></li>
+                <li><a href="{% url 'combination_drive_reservoir' %}"><span class="nav-dot"></span>Combination Drive</a></li>
+            </ul>
+
+            <div class="nav-divider"></div>
+            <p class="sidebar-section-label">Water Influx Models</p>
+            <ul class="nav-links">
+                <li><a href="{% url 'schilthuis' %}"><span class="nav-dot"></span>Schilthuis</a></li>
+                <li><a href="{% url 'van_everdingen_hurst' %}"><span class="nav-dot"></span>Van Everdingen–Hurst</a></li>
+                <li><a href="{% url 'fetkovich' %}"><span class="nav-dot"></span>Fetkovich</a></li>
+            </ul>
+
+            <div class="nav-divider"></div>
+            <ul class="nav-links">
+                <li><a href="https://tordiportfilio.pythonanywhere.com" target="_blank" rel="noopener" class="nav-external"><span class="nav-dot"></span>Portfolio ↗</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="#"><span class="nav-dot"></span>Dashboard</a></li>
+                {% endif %}
+            </ul>
+
         </div>
 
-        <ul class="nav-links" id="navLinks">
+        <div class="sidebar-footer">
+            <p>MBE Solver © 2026</p>
+        </div>
+    </aside>
 
-            <li><a href="{% url 'home' %}">Home</a></li>
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="main-wrap">
+        <main class="page-content" data-aos="fade-up">
+            {% block content %}{% endblock %}
+        </main>
 
-            <li><a href="{% url 'unit_converter' %}">Unit Converter</a></li>
-
-            <li><a href="{% url 'unit_reference' %}">Unit Reference</a></li>
-
-            <li><a href="{% url 'underground_withdrawal' %}">Underground Withdrawal</a></li>
-
-            <li><a href="{% url 'oil_expansion' %}">Oil Expansion (Eo)</a></li>
-
-            <li><a href="{% url 'oil_expansion_term' %}">Oil Expansion Term (Eo)</a></li>
-
-            <li><a href="{% url 'gas_cap_expansion' %}">Gas Cap Expansion (Eg)</a></li>
-
-            <li><a href="{% url 'formation_water_expansion' %}">Formation & Water Expansion</a></li>
-
-            <li><a href="{% url 'general_mbe' %}">General MBE (OOIP)</a></li>
-
-            <li><a href="{% url 'gas_fvf' %}">Gas FVF</a></li>
-
-            <li><a href="{% url 'gas_cap_drive_reservoir' %}">Gas Cap Drive Reservoir</a></li>
-
-            <li><a href="{% url 'volumetric_oil_reservoir' %}">Volumetric Oil Reservoir (OOIP)</a></li>
-
-            <li><a href="{% url 'oil_fvf' %}">Oil Formation Volume Factor (Bo)</a></li>
-
-            <li><a href="{% url 'gas_material_balance' %}">Gas Material Balance Equation</a></li>
-
-            <li><a href="{% url 'water_drive_reservoir' %}">Water Drive Reservoir</a></li>
-
-            <li><a href="{% url 'combination_drive_reservoir' %}">Combination Drive Reservoir</a></li>
-
-            <li><a href="{% url 'gas_cap_ratio' %}">Gas Cap Ratio</a></li>
-
-            <li><a href="{% url 'recovery_factor' %}">Recovery Factor</a></li>
-
-            <li><a href="{% url 'ogip' %}">Original Gas In Place</a></li>
-
-            <li><a href="{% url 'schilthuis' %}">Schilthuis Water Influx</a></li>
-
-            <li><a href="{% url 'van_everdingen_hurst' %}">Van Everdingen–Hurst Water Influx</a></li>
-
-            <li><a href="{% url 'fetkovich' %}">Fetkovich Water Influx</a></li>
-
-            <li><a href="https://tordiportfilio.pythonanywhere.com">Check out my Portfolio</a></li>
-
-            {% if user.is_authenticated %}
-                <li><a href="#">Dashboard</a></li>
-                <li><a href="{% url 'logout' %}">Logout</a></li>
-            {% else %}
-
-            {% endif %}
-
-        </ul>
-
-    </nav>
-
-    <!-- CONTENT -->
-    <div class="container" data-aos="fade-up">
-        {% block content %}{% endblock %}
+        <footer>
+            <p>Built by <a href="https://tordiportfilio.pythonanywhere.com" target="_blank" rel="noopener">Gbarabe Tordi Joseph</a></p>
+            <span class="footer-badge">MBE Solver · 2026</span>
+        </footer>
     </div>
 
-    <!-- FOOTER -->
-    <footer>
-        <p>MBE Solver © 2026 | Built by Gbarabe Tordi Joseph</p>
-    </footer>
-
-    <!-- SCRIPT -->
+    <!-- ===== SCRIPTS ===== -->
     <script>
-        function toggleMenu(){
-            document.getElementById("navLinks").classList.toggle("active");
+        function toggleSidebar() {
+            document.body.classList.toggle('sidebar-open');
         }
+
+        // Highlight active nav link based on current path
+        (function () {
+            const path = window.location.pathname;
+            document.querySelectorAll('.nav-links a').forEach(function (link) {
+                if (link.getAttribute('href') === path) {
+                    link.classList.add('active');
+                }
+            });
+        })();
+
+        // Close sidebar on mobile when a nav link is clicked
+        document.querySelectorAll('.nav-links a').forEach(function (link) {
+            link.addEventListener('click', function () {
+                if (window.innerWidth < 900) {
+                    document.body.classList.remove('sidebar-open');
+                }
+            });
+        });
+
+        // Close sidebar with Escape key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                document.body.classList.remove('sidebar-open');
+            }
+        });
     </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

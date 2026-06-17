@@ -1,90 +1,458 @@
 {% extends 'base.html' %}
 
-{% block title %}
-Welcome
-{% endblock %}
+{% block title %}Welcome — MBE Solver{% endblock %}
 
 {% block content %}
 
-<div style="background:#0f172a; border-radius:10px;">
+<style>
 
-    <h1 style="text-align:center;">
-        Welcome to the Material Balance Equation Solver
-    </h1>
+    .page-wrap, .page-wrap-wide { max-width: 680px; margin: 0 auto; }
+    .page-wrap-wide { max-width: 940px; }
 
-    <p style="text-align:center; color:#666;">
-        A Petroleum Reservoir Engineering Calculation Platform
-    </p>
+    /* ── Shared breadcrumb ── */
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-bottom: 24px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
 
-    <hr style="margin:30px 0;">
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover  { color: var(--accent); }
+    .breadcrumb .sep     { color: var(--border); }
+    .breadcrumb .current { color: var(--accent); }
 
-    <p style="line-height:1.8; text-align:justify;">
+    /* ── Hero ── */
+    .hero {
+        text-align: center;
+        padding: 48px 32px 36px;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        background: var(--bg-surface);
+        margin-bottom: 24px;
+    }
 
-        Welcome to the Material Balance Equation (MBE) Solver, a web-based
-        petroleum engineering application developed to assist students,
-        researchers, and reservoir engineers in performing reservoir
-        engineering calculations quickly and accurately.
+    .hero .eyebrow {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 14px;
+    }
 
-    </p>
+    .hero h1 {
+        font-size: 26px;
+        font-weight: 700;
+        color: var(--text-primary);
+        line-height: 1.25;
+        margin-bottom: 12px;
+    }
 
-    <p style="line-height:1.8; text-align:justify;">
+    .hero p {
+        font-size: 14px;
+        color: var(--text-muted);
+        line-height: 1.7;
+        max-width: 480px;
+        margin: 0 auto 28px;
+    }
 
-        Material Balance Equation analysis is one of the most important
-        techniques used in reservoir engineering for estimating hydrocarbon
-        reserves, evaluating reservoir performance, and understanding reservoir
-        drive mechanisms. Traditionally, these calculations are performed
-        manually, which can be time-consuming and prone to computational errors.
+    .enter-btn {
+        display: inline-block;
+        padding: 13px 32px;
+        background: var(--accent);
+        color: #0b1220;
+        font-size: 14px;
+        font-weight: 700;
+        font-family: "Segoe UI", Arial, sans-serif;
+        letter-spacing: 0.04em;
+        text-decoration: none;
+        border-radius: 8px;
+        transition: background 0.2s, transform 0.1s;
+    }
 
-    </p>
+    .enter-btn:hover  { background: var(--accent-hover); }
+    .enter-btn:active { transform: scale(0.98); }
 
-    <p style="line-height:1.8; text-align:justify;">
+    /* ── About card ── */
+    .about-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        overflow: hidden;
+        margin-bottom: 24px;
+    }
 
-        This software provides a centralized platform for solving important
-        reservoir engineering equations including:
+    .about-card .card-header {
+        padding: 22px 32px 18px;
+        border-bottom: 1px solid var(--border);
+    }
 
-    </p>
+    .about-card .card-header .eyebrow {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 6px;
+    }
 
-    <ul style="line-height:2; list-style:decimal;">
-        <li>General Material Balance Equation (MBE)</li>
-        <li>Underground Withdrawal Term (F)</li>
-        <li>Oil Expansion Term (Eo)</li>
-        <li>Gas Cap Expansion Term (Eg)</li>
-        <li>Formation and Water Expansion (Efw)</li>
-        <li>Gas Formation Volume Factor (Bg)</li>
-        <li>Gas Cap Ratio (m)</li>
-        <li>Original Oil In Place (OOIP)</li>
-        <li>Original Gas In Place (OGIP)</li>
-        <li>Recovery Factor (RF)</li>
-        <li>Schilthuis Water Influx Model</li>
-        <li>Van Everdingen-Hurst Water Influx Model</li>
-        <li>Fetkovich Water Influx Model</li>
-    </ul>
+    .about-card .card-header h2 {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--text-primary);
+    }
 
-    <p style="line-height:1.8; text-align:justify;">
+    .about-card .card-body {
+        padding: 20px 32px 26px;
+    }
 
-        The primary goal of this project is to provide an easy-to-use digital
-        tool that improves computational accuracy, reduces calculation time,
-        and enhances understanding of reservoir behavior through practical
-        engineering calculations.
+    .about-card .card-body p {
+        font-size: 13.5px;
+        color: var(--text-secondary);
+        line-height: 1.75;
+        margin-bottom: 14px;
+    }
 
-    </p>
+    .about-card .card-body p:last-child { margin-bottom: 0; }
 
-    <div style="text-align:center; margin-top:40px;">
+    /* ── Equations grid ── */
+    .equations-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        overflow: hidden;
+        margin-bottom: 24px;
+    }
 
-        <a href="{% url 'home' %}"
-           style="
-           background:#2d6cdf;
-           color:white;
-           padding:12px 25px;
-           text-decoration:none;
-           border-radius:5px;
-           font-weight:bold;
-           ">
-            Enter Application
-        </a>
+    .equations-card .card-header {
+        padding: 22px 32px 18px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .equations-card .card-header .eyebrow {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 6px;
+    }
+
+    .equations-card .card-header h2 {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+
+    .eq-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .eq-list li {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 13px 32px;
+        border-bottom: 1px solid var(--border);
+        font-size: 13.5px;
+        color: var(--text-secondary);
+        transition: background 0.15s;
+    }
+
+    .eq-list li:last-child { border-bottom: none; }
+    .eq-list li:hover { background: var(--bg-deep); }
+
+    .eq-index {
+        font-size: 10px;
+        font-weight: 700;
+        font-family: "Courier New", monospace;
+        color: var(--accent);
+        letter-spacing: 0.06em;
+        min-width: 22px;
+        flex-shrink: 0;
+    }
+
+    /* ── Final Year Project card (reuses .calc-card shell) ── */
+    .calc-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .calc-card .card-header {
+        padding: 28px 32px 22px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .calc-card .card-header .eyebrow {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 8px;
+    }
+
+    .calc-card .card-header h1 {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--text-primary);
+        line-height: 1.2;
+        margin-bottom: 10px;
+    }
+
+    .calc-card .card-header .project-topic {
+        font-size: 14px;
+        color: var(--text-secondary);
+        line-height: 1.5;
+    }
+
+    .calc-card .card-header .project-topic .topic-label {
+        color: var(--accent);
+        font-weight: 700;
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 6px;
+    }
+
+    .calc-card .card-body { padding: 4px 32px 36px; }
+
+    .section-block { margin-top: 30px; }
+    .section-block:first-child { margin-top: 22px; }
+
+    .section-title {
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-primary);
+        padding-bottom: 10px;
+        margin-bottom: 16px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px 24px;
+        background: var(--bg-deep);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 18px 22px;
+    }
+
+    .info-item label {
+        display: block;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 4px;
+    }
+
+    .info-item p {
+        font-size: 14.5px;
+        color: var(--text-primary);
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .prose p {
+        font-size: 14.5px;
+        line-height: 1.75;
+        color: var(--text-secondary);
+        margin: 0 0 16px;
+    }
+
+    .prose p:last-child { margin-bottom: 0; }
+
+    .objectives-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        counter-reset: obj-counter;
+    }
+
+    .objectives-list li {
+        counter-increment: obj-counter;
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border);
+        font-size: 14px;
+        color: var(--text-secondary);
+        line-height: 1.6;
+    }
+
+    .objectives-list li:last-child { border-bottom: none; }
+
+    .objectives-list li::before {
+        content: counter(obj-counter);
+        flex-shrink: 0;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: var(--bg-deep);
+        border: 1px solid var(--border-accent);
+        color: var(--accent);
+        font-size: 11px;
+        font-weight: 700;
+        font-family: "Courier New", monospace;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--text-muted);
+        font-size: 13px;
+        text-decoration: none;
+        margin-top: 26px;
+        transition: color 0.2s;
+    }
+
+    .back-link:hover { color: var(--accent); }
+
+    @media (max-width: 600px) {
+        .hero { padding: 36px 18px 28px; }
+        .about-card .card-header,
+        .about-card .card-body,
+        .equations-card .card-header { padding-left: 18px; padding-right: 18px; }
+        .eq-list li { padding-left: 18px; padding-right: 18px; }
+        .hero h1 { font-size: 21px; }
+        .calc-card .card-header, .calc-card .card-body { padding-left: 18px; padding-right: 18px; }
+        .info-grid { grid-template-columns: 1fr; }
+    }
+
+</style>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- Final Year Project                            -->
+<!-- ════════════════════════════════════════════ -->
+
+<div class="page-wrap-wide" style="margin-top: 24px;">
+
+    <div class="breadcrumb">
+        <a href="/">Home</a>
+        <span class="sep">›</span>
+        <span class="current">Final Year Project</span>
+    </div>
+
+    <div class="calc-card">
+
+        <div class="card-header">
+            <div class="eyebrow">Academic · Project Overview</div>
+            <h1>Final Year Project</h1>
+            <p class="project-topic">
+                <span class="topic-label">Topic</span>
+                Development of a Computer Application for Reservoir Petrophysical Evaluation Using Well Log Data
+            </p>
+        </div>
+
+        <div class="card-body">
+            <div class="section-block">
+                <div class="section-title">Student Information</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>Name</label>
+                        <p>Gbarabe Tordi Joseph</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Matriculation Number</label>
+                        <p>U2020/3065033</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Supervisor</label>
+                        <p>Dr. Emeka Okafor</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Institution</label>
+                        <p>University of Port Harcourt</p>
+                    </div>
+                </div>
+            </div>                    
+            <a href="/" class="back-link">← Back to Dashboard</a>
+        </div>
 
     </div>
 
 </div>
+
+<div class="page-wrap">
+
+    <!-- Hero -->
+    <div class="hero">
+        <div class="eyebrow">Petroleum Reservoir Engineering</div>
+        <h1>Material Balance Equation Solver</h1>
+        <p>
+            A digital platform for performing accurate MBE calculations —
+            built for students, researchers, and reservoir engineers.
+        </p>
+        <a href="{% url 'home' %}" class="enter-btn">Enter Application →</a>
+    </div>
+
+    <!-- About -->
+    <div class="about-card">
+        <div class="card-header">
+            <div class="eyebrow">About</div>
+            <h2>What is this platform?</h2>
+        </div>
+        <div class="card-body">
+            <p>
+                The MBE Solver is a web-based reservoir engineering application
+                built to help engineers and students solve material balance
+                calculations quickly and accurately, without the overhead of
+                manual computation.
+            </p>
+            <p>
+                Material Balance Equation analysis is one of the most important
+                techniques in reservoir engineering — used to estimate hydrocarbon
+                reserves, evaluate reservoir performance, and understand drive
+                mechanisms. This platform centralises those calculations in one
+                place.
+            </p>
+        </div>
+    </div>
+
+    <!-- Equations -->
+    <div class="equations-card">
+        <div class="card-header">
+            <div class="eyebrow">Coverage</div>
+            <h2>Supported Equations</h2>
+        </div>
+        <ol class="eq-list">
+            <li><span class="eq-index">01</span> General Material Balance Equation (MBE)</li>
+            <li><span class="eq-index">02</span> Underground Withdrawal Term (F)</li>
+            <li><span class="eq-index">03</span> Oil Expansion Term (Eo)</li>
+            <li><span class="eq-index">04</span> Gas Cap Expansion Term (Eg)</li>
+            <li><span class="eq-index">05</span> Formation and Water Expansion (Efw)</li>
+            <li><span class="eq-index">06</span> Gas Formation Volume Factor (Bg)</li>
+            <li><span class="eq-index">07</span> Gas Cap Ratio (m)</li>
+            <li><span class="eq-index">08</span> Original Oil In Place (OOIP)</li>
+            <li><span class="eq-index">09</span> Original Gas In Place (OGIP)</li>
+            <li><span class="eq-index">10</span> Recovery Factor (RF)</li>
+            <li><span class="eq-index">11</span> Schilthuis Water Influx Model</li>
+            <li><span class="eq-index">12</span> Van Everdingen–Hurst Water Influx Model</li>
+            <li><span class="eq-index">13</span> Fetkovich Water Influx Model</li>
+        </ol>
+    </div>
+
+</div>
+
 
 {% endblock %}

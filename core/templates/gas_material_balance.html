@@ -1,150 +1,341 @@
 {% extends 'base.html' %}
 
-{% block title %}
-Gas Material Balance Equation
-{% endblock %}
+{% block title %}Gas Material Balance Equation — MBE Solver{% endblock %}
 
 {% block content %}
 
-    <style>
+<style>
 
-        body{
-            background:#f5f7fb;
-            font-family:Arial,sans-serif;
-            margin:0;
-            padding:0;
-            color:#222;
-        }
+    .page-wrap { max-width: 680px; margin: 0 auto; }
 
-        .container{
-            max-width:850px;
-            margin:50px auto;
-            background:white;
-            padding:30px;
-            border-radius:10px;
-            box-shadow:0 2px 10px rgba(0,0,0,0.08);
-        }
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-bottom: 24px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
 
-        h1{
-            text-align:center;
-            font-size:26px;
-            margin-bottom:20px;
-        }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover  { color: var(--accent); }
+    .breadcrumb .sep     { color: var(--border); }
+    .breadcrumb .current { color: var(--accent); }
 
-        .formula{
-            text-align:center;
-            background:#f0f2f5;
-            padding:15px;
-            border-radius:6px;
-            margin-bottom:25px;
-            font-size:18px;
-        }
+    .calc-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        overflow: hidden;
+    }
 
-        label{
-            display:block;
-            margin-bottom:5px;
-            font-weight:600;
-            font-size:14px;
-        }
+    .card-header {
+        padding: 28px 32px 22px;
+        border-bottom: 1px solid var(--border);
+    }
 
-        input{
-            width:100%;
-            padding:10px;
-            margin-bottom:15px;
-            border:1px solid #ccc;
-            border-radius:6px;
-            box-sizing:border-box;
-            font-size:14px;
-        }
+    .card-header .eyebrow {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 8px;
+    }
 
-        button{
-            width:100%;
-            padding:12px;
-            background:#2d6cdf;
-            color:white;
-            border:none;
-            border-radius:6px;
-            cursor:pointer;
-            font-size:15px;
-        }
+    .card-header h1 {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--text-primary);
+        line-height: 1.2;
+    }
 
-        button:hover{
-            background:#1f56b3;
-        }
+    .formula-strip {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin: 22px 32px;
+        background: var(--bg-deep);
+        border: 1px solid var(--border-accent);
+        border-radius: 10px;
+        padding: 16px 20px;
+    }
 
-        .result{
-            margin-top:20px;
-            padding:15px;
-            background:#f8f9fa;
-            border-left:5px solid #2d6cdf;
-        }
+    .formula-bar {
+        width: 3px;
+        min-height: 44px;
+        background: var(--accent);
+        border-radius: 2px;
+        flex-shrink: 0;
+    }
 
-        .result h3{
-            margin-top:0;
-        }
+    .formula-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 6px;
+    }
 
-        a{
-            display:inline-block;
-            margin-top:20px;
-            text-decoration:none;
-            color:#2d6cdf;
-        }
+    .formula-eq {
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--text-primary);
+        letter-spacing: 0.03em;
+        font-family: "Courier New", monospace;
+        line-height: 1.5;
+    }
 
-    </style>
+    .formula-eq em { color: var(--accent); font-style: normal; }
 
-<body>
+    .card-body { padding: 4px 32px 30px; }
 
-<div class="container">
+    .field-section-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        padding-bottom: 10px;
+        margin-bottom: 4px;
+        border-bottom: 1px solid var(--border);
+        margin-top: 6px;
+    }
 
-    <h1>Gas Material Balance Equation</h1>
+    .field-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
 
-    <div class="formula">
-        G = Gp / [1 − (p/Z)/(Pi/Zi)]
+    .field-group { margin-bottom: 18px; }
+
+    .field-group label {
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+        margin-bottom: 6px;
+    }
+
+    .field-hint {
+        font-size: 10px;
+        color: var(--text-muted);
+        font-weight: 400;
+        letter-spacing: 0;
+        text-transform: none;
+        margin-top: -2px;
+        margin-bottom: 8px;
+    }
+
+    .field-group input {
+        width: 100%;
+        padding: 11px 14px;
+        background: var(--bg-deep);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text-primary);
+        font-size: 15px;
+        font-family: "Segoe UI", Arial, sans-serif;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        -moz-appearance: textfield;
+        box-sizing: border-box;
+    }
+
+    .field-group input::-webkit-outer-spin-button,
+    .field-group input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+    .field-group input::placeholder { color: var(--text-muted); font-size: 13px; }
+
+    .field-group input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.12);
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 13px;
+        background: var(--accent);
+        color: #0b1220;
+        font-size: 14px;
+        font-weight: 700;
+        font-family: "Segoe UI", Arial, sans-serif;
+        letter-spacing: 0.04em;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 4px;
+        transition: background 0.2s, transform 0.1s;
+    }
+
+    .submit-btn:hover  { background: var(--accent-hover); }
+    .submit-btn:active { transform: scale(0.98); }
+
+    .result-box {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-top: 20px;
+        background: var(--bg-deep);
+        border: 1px solid var(--border-accent);
+        border-radius: 10px;
+        padding: 18px 22px;
+    }
+
+    .result-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--accent);
+        flex-shrink: 0;
+        box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+    }
+
+    .result-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 5px;
+    }
+
+    .result-value {
+        font-size: 26px;
+        font-weight: 700;
+        color: var(--accent);
+        font-family: "Courier New", monospace;
+        line-height: 1.1;
+    }
+
+    .result-value span {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-secondary);
+        font-family: "Segoe UI", Arial, sans-serif;
+        margin-left: 6px;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--text-muted);
+        font-size: 13px;
+        text-decoration: none;
+        margin-top: 22px;
+        transition: color 0.2s;
+    }
+
+    .back-link:hover { color: var(--accent); }
+
+    @media (max-width: 600px) {
+        .card-header, .card-body { padding-left: 18px; padding-right: 18px; }
+        .formula-strip { margin-left: 18px; margin-right: 18px; }
+        .field-row { grid-template-columns: 1fr; }
+        .formula-eq { font-size: 16px; }
+    }
+
+</style>
+
+<div class="page-wrap">
+
+    <div class="breadcrumb">
+        <a href="/">Home</a>
+        <span class="sep">›</span>
+        <a href="/">Drive Mechanisms</a>
+        <span class="sep">›</span>
+        <span class="current">Gas MBE</span>
     </div>
 
-    <form method="POST">
+    <div class="calc-card">
 
-        {% csrf_token %}
+        <div class="card-header">
+            <div class="eyebrow">Drive Mechanisms · Material Balance</div>
+            <h1>Gas Material Balance Equation</h1>
+        </div>
 
-        <label>Current Pressure (p)</label>
-        <input type="number" step="any" name="p" required>
+        <div class="formula-strip">
+            <div class="formula-bar"></div>
+            <div>
+                <div class="formula-label">Formula</div>
+                <div class="formula-eq">
+                    <em>G</em> = <em>Gp</em> / [ 1 − (<em>p</em>/<em>Z</em>) / (<em>Pi</em>/<em>Zi</em>) ]
+                </div>
+            </div>
+        </div>
 
-        <label>Current Gas Compressibility Factor (Z)</label>
-        <input type="number" step="any" name="z" required>
+        <div class="card-body">
 
-        <label>Initial Pressure (Pi)</label>
-        <input type="number" step="any" name="pi" required>
+            <form method="POST">
+                {% csrf_token %}
 
-        <label>Initial Gas Compressibility Factor (Zi)</label>
-        <input type="number" step="any" name="zi" required>
+                <p class="field-section-label">Initial Conditions</p>
 
-        <label>Cumulative Gas Produced (Gp)</label>
-        <input type="number" step="any" name="Gp" required>
+                <div class="field-row">
+                    <div class="field-group">
+                        <label for="pi">Initial Pressure (Pi)</label>
+                        <p class="field-hint">psia — at discovery</p>
+                        <input type="number" step="any" id="pi" name="pi" placeholder="e.g. 3500" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="zi">Initial Z-Factor (Zi)</label>
+                        <p class="field-hint">Dimensionless — at Pi</p>
+                        <input type="number" step="any" id="zi" name="zi" placeholder="e.g. 0.90" required>
+                    </div>
+                </div>
 
-        <button type="submit">
-            Calculate OGIP Using Gas MBE
-        </button>
+                <p class="field-section-label">Current Conditions</p>
 
-    </form>
+                <div class="field-row">
+                    <div class="field-group">
+                        <label for="p">Current Pressure (p)</label>
+                        <p class="field-hint">psia — reservoir pressure now</p>
+                        <input type="number" step="any" id="p" name="p" placeholder="e.g. 2800" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="z">Current Z-Factor (Z)</label>
+                        <p class="field-hint">Dimensionless — at p</p>
+                        <input type="number" step="any" id="z" name="z" placeholder="e.g. 0.85" required>
+                    </div>
+                </div>
 
-    {% if result is not None %}
+                <p class="field-section-label">Production</p>
 
-    <div class="result">
+                <div class="field-group">
+                    <label for="Gp">Cumulative Gas Produced (Gp)</label>
+                    <p class="field-hint">SCF — total gas produced to date</p>
+                    <input type="number" step="any" id="Gp" name="Gp" placeholder="e.g. 450000" required>
+                </div>
 
-        <h3>Calculation Result</h3>
+                <button type="submit" class="submit-btn">Calculate OGIP</button>
 
-        <p>
-            <strong>Original Gas In Place (G):</strong>
-            {{ result }} {{ unit }}
-        </p>
+            </form>
+
+            {% if result is not None %}
+            <div class="result-box">
+                <div class="result-dot"></div>
+                <div>
+                    <div class="result-label">Original Gas In Place (G)</div>
+                    <div class="result-value">
+                        {{ result }}<span>{{ unit }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <a href="/" class="back-link">← Back to Dashboard</a>
+
+        </div>
 
     </div>
-
-    {% endif %}
-
-    <a href="/">← Back to Dashboard</a>
 
 </div>
 
-</body>
 {% endblock %}
